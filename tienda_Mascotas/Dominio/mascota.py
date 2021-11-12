@@ -27,3 +27,8 @@ class Mascota(ElementoCompra):
             if k not in dict_mascota or dict_mascota[k] != especificacion.get_value(k):
                 return False
         return True
+
+    def guardar(self ,mascota):
+        from tienda_Mascotas.Infraestructura.persistencia import Persistencia
+        persitencia_mascota = Persistencia()
+        persitencia_mascota.guardar_mascota(mascota)
