@@ -1,15 +1,14 @@
 import json
-import waitress
-
 import falcon
+import waitress as waitress
 from falcon import API
-
+from tienda_Mascotas.Dominio.mascota import Mascota
 from tienda_Mascotas.Infraestructura.persistencia import Persistencia
 
 
 class mascota():
 
-    def on_get(self, req, resp, codigo):
+    def on_get(self, req, resp):
         db = Persistencia()
         mascotas = db.consultar_tabla_mascota()
         template = """<!-- #######  YAY, I AM THE SOURCE EDITOR! #########-->
@@ -40,12 +39,17 @@ class mascota():
         resp.content_type = 'text/html'
         resp.status = falcon.HTTP_OK
 
+    def on_post(self, req, resp):
+        mascota = Mascota(**req.media)
+        mascota.guardar(mascota)
+        resp.status = falcon.HTTP_CREATED
+
 
 def iniciar() -> API:
     # run:app -b 0.0.0.0:2020 --workers 1 -t 240
     api = API()
-    api.add_route("/mascota/{codigo}", mascota())
-
+    api.add_route("/mascota/", mascota())
+    api.add_route("/mascota_guardar/", mascota())
     return api
 
 

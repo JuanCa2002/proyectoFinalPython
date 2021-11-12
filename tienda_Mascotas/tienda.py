@@ -106,7 +106,8 @@ if __name__ == '__main__':
                         Persistencia.save_json_mascota(mascota)
                         print("\n Se agrego la mascota con exito en js")
                     else:
-                        saver.guardar_mascota(mascota)
+                        mascota.guardar(mascota)
+                        #saver.guardar_mascota(mascota)
                         print("\n Se agrego la mascota con exito en bd")
                 except Exception as ex:
                     print(ex)

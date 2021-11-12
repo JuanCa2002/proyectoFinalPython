@@ -51,6 +51,7 @@ class Persistencia:
         rows = cursor.fetchall()
         return [Mascota(*row) for row in rows]
 
+
     def __crear_tabla_empleado(self):
         try:
             cursor = self.con.cursor()
