@@ -1,4 +1,7 @@
 import uuid
+
+import jsonpickle
+
 from tienda_Mascotas.Dominio.persona import Persona
 
 
@@ -32,3 +35,36 @@ class Empleado(Persona):
             if k not in dict_empleado or dict_empleado[k] != especificacion.get_value(k):
                 return False
         return True
+
+    def guardar(self, empleado):
+        from tienda_Mascotas.Infraestructura.persistenciaEmpleado import PersistenciaEmpleado
+        persitencia_empleado = PersistenciaEmpleado()
+        persitencia_empleado.guardar_empleado(empleado)
+
+    def guardar_actualizar(self):
+        self._actualizar(self.codigoEmpleado)
+
+    def _actualizar(self, codigoEmpleado):
+        from tienda_Mascotas.Infraestructura.persistenciaEmpleado import PersistenciaEmpleado
+        persitencia_empleado = PersistenciaEmpleado()
+        persitencia_empleado.actualizar_empleado(self, codigoEmpleado)
+
+    def update(self, dict_params):
+        self.codigo = dict_params.get('codigo', self.codigo)
+        self.nombre = dict_params.get('nombre', self.nombre)
+        self.cedula = dict_params.get('cedula', self.cedula)
+        self.apellido = dict_params.get('apellido', self.apellido)
+        self.cargo = dict_params.get('cargo', self.cargo)
+        self.salario = dict_params.get('salario', self.salario)
+        self.genero = dict_params.get('genero', self.genero)
+        self.edad = dict_params.get('edad', self.edad)
+        self.direccion = dict_params.get('direccion', self.direccion)
+        self.correo = dict_params.get('correo', self.correo)
+        self.horario = dict_params.get('horario', self.horario)
+
+    def eliminar(self, codigoEmpleado):
+        from tienda_Mascotas.Infraestructura.persistenciaEmpleado import PersistenciaEmpleado
+        persisten_empleado = PersistenciaEmpleado()
+        persisten_empleado.eliminar_empleado(codigoEmpleado)
+
+
