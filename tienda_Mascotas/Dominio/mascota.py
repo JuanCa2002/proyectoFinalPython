@@ -28,7 +28,29 @@ class Mascota(ElementoCompra):
                 return False
         return True
 
-    def guardar(self ,mascota):
-        from tienda_Mascotas.Infraestructura.persistencia import Persistencia
-        persitencia_mascota = Persistencia()
+    def guardar(self, mascota):
+        from tienda_Mascotas.Infraestructura.persistenciaMascota import PersistenciaMascota
+        persitencia_mascota = PersistenciaMascota()
         persitencia_mascota.guardar_mascota(mascota)
+
+    def guardar_actualizar(self):
+        self._actualizar(self.codigoMascota)
+
+    def _actualizar(self, codigoMascota):
+        from tienda_Mascotas.Infraestructura.persistenciaMascota import PersistenciaMascota
+        persitencia_mascota = PersistenciaMascota()
+        persitencia_mascota.actualizar_mascota(self, codigoMascota)
+
+    def update(self, dict_params):
+        self.codigoMascota = dict_params.get('codigoMascota', self.codigoMascota)
+        self.tipoMascota = dict_params.get('tipoMascota', self.tipoMascota)
+        self.raza = dict_params.get('raza', self.raza)
+        self.nombre = dict_params.get('nombre', self.nombre)
+        self.edad = dict_params.get('edad', self.edad)
+        self.precio = dict_params.get('precio', self.precio)
+        self.cantidad = dict_params.get('cantidad', self.cantidad)
+
+    def eliminar(self, codigoMascota):
+        from tienda_Mascotas.Infraestructura.persistenciaMascota import PersistenciaMascota
+        persisten_mascota = PersistenciaMascota()
+        persisten_mascota.eliminar_mascota(codigoMascota)

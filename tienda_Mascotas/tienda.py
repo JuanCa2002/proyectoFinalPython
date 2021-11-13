@@ -5,27 +5,48 @@ from tienda_Mascotas.Dominio.accesorio import Accesorio
 from tienda_Mascotas.Dominio.cliente import Cliente
 from tienda_Mascotas.Dominio.empleado import Empleado
 from tienda_Mascotas.Dominio.venta import Venta
-from tienda_Mascotas.Infraestructura.persistencia import Persistencia
+from tienda_Mascotas.Infraestructura.persistenciaAccesorio import PersistenciaAccesorio
+from tienda_Mascotas.Infraestructura.persistenciaAlimento import PersistenciaAlimento
+from tienda_Mascotas.Infraestructura.persistenciaCliente import PersistenciaCliente
+from tienda_Mascotas.Infraestructura.persistenciaEmpleado import PersistenciaEmpleado
+from tienda_Mascotas.Infraestructura.persistenciaMascota import PersistenciaMascota
 from tienda_Mascotas.Dominio.especificacion import Especificacion
 from tienda_Mascotas.Infraestructura.configuracion import Configuracion
 import os
+
+from tienda_Mascotas.Infraestructura.persistenciaVenta import PersistenciaVenta
 
 if __name__ == '__main__':
 
     """Primero declaramos la persistencia y luego utilizamos el metodo saver.connect cuando iniciamos la aplicacion
     esto genera la base de datos sqlite y las tablas de la entitades que necesitamos con sus atributos"""
 
-    saver = Persistencia()
-    saver.connect()
+    saverMascota = PersistenciaMascota()
+    saverMascota.connect()
+    saverAccesorios=PersistenciaAccesorio()
+    saverAccesorios.connect()
+    saverAlimentos=PersistenciaAlimento()
+    saverAlimentos.connect()
+    saverCliente=PersistenciaCliente()
+    saverCliente.connect()
+    saverEmpleado=PersistenciaEmpleado()
+    saverEmpleado.connect()
+    saverVenta=PersistenciaVenta()
+    saverVenta.connect()
 
-
+    # def actualizarMascota(inventario):
+    #     espec = Especificacion()
+    #     mascota = Mascota("123", "Gato", "Persa", "Michi", 1, 150000.0, 10)
+    #     espec.agregar_parametro("codigoMascota", mascota.codigoMascota)
+    #     mascota_aux = list(inventario.buscar_mascota(espec))
+    #     mascota._actualizar(mascota_aux, mascota_aux.codigoMascota)
 
     # Metodo generar configuracion, el cual trae la configuracion que esta guardada en archivo plano json
 
     def generarConfiguracion():
-        for file in os.listdir("./files"):
+        for file in os.listdir("files"):
             if '1.json' in file:
-                configuracion = Persistencia.load_json_configuracion(file)
+                configuracion = PersistenciaMascota.load_json_configuracion(file)
         return configuracion
 
 
@@ -35,11 +56,11 @@ if __name__ == '__main__':
 
     def generarInventario():
         inventario = Inventario()
-        mascotas = saver.consultar_tabla_mascota()
-        alimentos = saver.consultar_tabla_alimento()
-        accesorios = saver.consultar_tabla_accesorio()
-        clientes = saver.consultar_tabla_cliente()
-        empleados = saver.consultar_tabla_empleado()
+        mascotas = saverMascota.consultar_tabla_mascota()
+        alimentos = saverAlimentos.consultar_tabla_alimento()
+        accesorios = saverAccesorios.consultar_tabla_accesorio()
+        clientes = saverCliente.consultar_tabla_cliente()
+        empleados = saverEmpleado.consultar_tabla_empleado()
         for mascota in mascotas:
             inventario.agregar_mascota(mascota)
         for alimento in alimentos:
@@ -50,22 +71,23 @@ if __name__ == '__main__':
             inventario.agregar_cliente(cliente)
         for empleado in empleados:
             inventario.agregar_empleado(empleado)
-        ventas= saver.consultar_tabla_venta(inventario)
+        ventas = saverVenta.consultar_tabla_venta(inventario)
         for venta in ventas:
             inventario.agregar_venta(venta)
-        for file in os.listdir("./files"):
+        for file in os.listdir("files"):
             if '1.json' in file:
-                configuracion = Persistencia.load_json_configuracion(file)
+                configuracion = PersistenciaMascota.load_json_configuracion(file)
             elif '.jsonMascota' in file:
-                inventario.agregar_mascota(Persistencia.load_json_mascota(file))
+                inventario.agregar_mascota(PersistenciaMascota.load_json_mascota(file))
             elif '.jsonEmpleado' in file:
-                inventario.agregar_empleado(Persistencia.load_json_empleado(file))
+                inventario.agregar_empleado(PersistenciaEmpleado.load_json_empleado(file))
             elif '.jsonCliente' in file:
-                inventario.agregar_cliente(Persistencia.load_json_cliente(file))
+                inventario.agregar_cliente(PersistenciaCliente.load_json_cliente(file))
             elif '.jsonAlimento' in file:
-                inventario.agregar_alimento(Persistencia.load_json_alimento(file))
+                inventario.agregar_alimento(PersistenciaAlimento.load_json_alimento(file))
             elif '.jsonAccesorio' in file:
-                inventario.agregar_accesorio(Persistencia.load_json_accesorio(file))
+                inventario.agregar_accesorio(PersistenciaAccesorio.load_json_accesorio(file))
+
         return inventario
 
 
@@ -103,11 +125,11 @@ if __name__ == '__main__':
                 try:
                     inventario.agregar_mascota(mascota)
                     if configuracion.estado == "archivo plano json":
-                        Persistencia.save_json_mascota(mascota)
+                        PersistenciaMascota.save_json_mascota(mascota)
                         print("\n Se agrego la mascota con exito en js")
                     else:
                         mascota.guardar(mascota)
-                        #saver.guardar_mascota(mascota)
+                        # saver.guardar_mascota(mascota)
                         print("\n Se agrego la mascota con exito en bd")
                 except Exception as ex:
                     print(ex)
@@ -125,10 +147,10 @@ if __name__ == '__main__':
                 try:
                     inventario.agregar_alimento(alimento)
                     if configuracion.estado == "archivo plano json":
-                        Persistencia.save_json_alimento(alimento)
+                        PersistenciaAlimento.save_json_alimento(alimento)
                         print("\n Se agrego el alimento para mascotas con exito en js")
                     else:
-                        saver.guardar_alimento(alimento)
+                        saverAlimentos.guardar_alimento(alimento)
                         print("\n Se agrego el alimento para mascotas con exito en bd")
                 except Exception as ex:
                     print(ex)
@@ -144,10 +166,10 @@ if __name__ == '__main__':
                 try:
                     inventario.agregar_accesorio(accesorio)
                     if configuracion.estado == "archivo plano json":
-                        Persistencia.save_json_accesorio(accesorio)
+                        PersistenciaAccesorio.save_json_accesorio(accesorio)
                         print("\n Se agrego el accesorio de mascotas con exito en js")
                     else:
-                        saver.guardar_accesorio(accesorio)
+                        saverAccesorios.guardar_accesorio(accesorio)
                         print("\n Se agrego el accesorio de mascotas con exito en bd")
                 except Exception as ex:
                     print(ex)
@@ -167,10 +189,10 @@ if __name__ == '__main__':
                 try:
                     inventario.agregar_cliente(cliente)
                     if configuracion.estado == "archivo plano json":
-                        Persistencia.save_json_cliente(cliente)
+                        PersistenciaCliente.save_json_cliente(cliente)
                         print("\n Se agrego el nuevo cliente con exito en js")
                     else:
-                        saver.guardar_cliente(cliente)
+                        saverCliente.guardar_cliente(cliente)
                         print("\n Se agrego el nuevo cliente con exito en bd")
                 except Exception as ex:
                     print(ex)
@@ -193,10 +215,10 @@ if __name__ == '__main__':
                 try:
                     inventario.agregar_empleado(empleado)
                     if configuracion.estado == "archivo plano json":
-                        Persistencia.save_json_empleado(empleado)
+                        PersistenciaEmpleado.save_json_empleado(empleado)
                         print("\n Se agrego el nuevo empleado con exito en js")
                     else:
-                        saver.guardar_empleado(empleado)
+                        saverEmpleado.guardar_empleado(empleado)
                         print("\n Se agrego el nuevo empleado con exito en bd")
                 except Exception as ex:
                     print(ex)
@@ -213,11 +235,11 @@ if __name__ == '__main__':
                     opcion = input("Que opcion elige?:")
                     if opcion == "1":
                         configuracion.cambiarEstadoConfiguracion("archivo plano json")
-                        Persistencia.save_json_configuracion(configuracion)
+                        PersistenciaMascota.save_json_configuracion(configuracion)
                         print("Se cambio la configuracion a archivos planos de tipo json")
                     elif opcion == "2":
                         configuracion.cambiarEstadoConfiguracion("Base de datos sqlite")
-                        Persistencia.save_json_configuracion(configuracion)
+                        PersistenciaMascota.save_json_configuracion(configuracion)
                         print("Se cambio la configuracion a Base de datos sqlite")
                     elif opcion == "3":
                         print("Se guardaron los cambios")
@@ -472,8 +494,9 @@ if __name__ == '__main__':
             elif opc != "":
                 print("\n Opcion invalida porfavor rectifica")
 
+
     def generarVenta():
-        inventario= generarInventario()
+        inventario = generarInventario()
         respVenta = True
         while respVenta:
             print("""
@@ -485,96 +508,101 @@ if __name__ == '__main__':
                 4.Terminar y salir.
                 """)
             respVenta = input("Cual de las opciones quieres?: ")
-            if respVenta=="1":
+            if respVenta == "1":
                 venderMascota(inventario)
-            elif respVenta== "2":
+            elif respVenta == "2":
                 venderAccesorio(inventario)
-            elif respVenta== "3":
+            elif respVenta == "3":
                 venderAlimento(inventario)
-            elif respVenta== "4":
-                respVenta=False
+            elif respVenta == "4":
+                respVenta = False
             else:
                 print("Ingrese una de las opciones maldito fracasado!")
 
 
     def venderMascota(inventario):
         for mascota in inventario.mascotas:
-                print("codigoMascota: "+str(mascota.codigoMascota)+"\n"
-                          +"Nombre: "+mascota.nombre+"\n"
-                          +"Tipo de mascota: "+mascota.tipoMascota+"\n"
-                          +"Raza: "+mascota.raza+"\n"
-                          +"Edad: "+str(mascota.edad)+"\n"
-                          +"Cantidad disponible: "+str(mascota.cantidad)+"\n"
-                          +"Precio: "+str(mascota.precio))
-                    #Actualizar la base de datos
-        codigoMascota=input("Ingrese el codigo de la mascota que se quiere comprar: ")
-        codigoCliente= input("Ingrese el codigo del cliente que realiza la compra: ")
-        codigoEmpleado= input("Ingrese el codigo del empleado que realiza la venta: ")
-        cantidad=int(input("Ingrese la cantidad de mascotas que desea comprar: "))
-        espc= Especificacion()
-        espc.agregar_parametro("codigoMascota",codigoMascota)
-        espcEmpleado= Especificacion()
-        espcEmpleado.agregar_parametro("codigo",codigoEmpleado)
-        espcCliente= Especificacion()
-        espcCliente.agregar_parametro("codigoCliente",codigoCliente)
-        mascotas=list(inventario.buscar_mascota(espc))
-        empleados= list(inventario.buscar_empleado(espcEmpleado))
-        clientes= list(inventario.buscar_cliente(espcCliente))
-        precioTotal= cantidad*mascotas[0].precio
-        venta= Venta(clientes[0],empleados[0],mascotas[0].nombre,cantidad,mascotas[0].precio,precioTotal)
-        saver.guardar_venta(venta)
+            print("codigoMascota: " + str(mascota.codigoMascota) + "\n"
+                  + "Nombre: " + mascota.nombre + "\n"
+                  + "Tipo de mascota: " + mascota.tipoMascota + "\n"
+                  + "Raza: " + mascota.raza + "\n"
+                  + "Edad: " + str(mascota.edad) + "\n"
+                  + "Cantidad disponible: " + str(mascota.cantidad) + "\n"
+                  + "Precio: " + str(mascota.precio))
+            # Actualizar la base de datos
+        codigoMascota = input("Ingrese el codigo de la mascota que se quiere comprar: ")
+        codigoCliente = input("Ingrese el codigo del cliente que realiza la compra: ")
+        codigoEmpleado = input("Ingrese el codigo del empleado que realiza la venta: ")
+        cantidad = int(input("Ingrese la cantidad de mascotas que desea comprar: "))
+        espc = Especificacion()
+        espc.agregar_parametro("codigoMascota", codigoMascota)
+        espcEmpleado = Especificacion()
+        espcEmpleado.agregar_parametro("codigo", codigoEmpleado)
+        espcCliente = Especificacion()
+        espcCliente.agregar_parametro("codigoCliente", codigoCliente)
+        mascotas = list(inventario.buscar_mascota(espc))
+        empleados = list(inventario.buscar_empleado(espcEmpleado))
+        clientes = list(inventario.buscar_cliente(espcCliente))
+        precioTotal = cantidad * mascotas[0].precio
+        venta = Venta(clientes[0], empleados[0], mascotas[0].nombre, cantidad, mascotas[0].precio, precioTotal)
+        saverVenta.guardar_venta(venta)
+
 
     def venderAccesorio(inventario):
         for accesorio in inventario.accesorios:
-                print("codigo accesorio: "+str(accesorio.codigoAccesorio)+"\n"
-                          +"Nombre: "+accesorio.nombreAccesorio+"\n"
-                          +"Descripcion: "+accesorio.descripcionAccesorio+"\n"
-                          +"Uso: "+accesorio.usoAccesorio+"\n"
-                          +"Cantidad diponible: "+str(accesorio.cantidad)+"\n"
-                          +"Precio: "+str(accesorio.precio))
-                    #Actualizar la base de datos
-        codigoAccesorio=input("Ingrese el codigo del accesorio que se quiere comprar: ")
-        codigoCliente= input("Ingrese el codigo del cliente que realiza la compra: ")
-        codigoEmpleado= input("Ingrese el codigo del empleado que realiza la venta: ")
-        cantidad=input("Ingrese la cantidad de accesorios que desea comprar: ")
-        espc= Especificacion()
-        espc.agregar_parametro("codigoAccesorio",codigoAccesorio)
-        espcEmpleado= Especificacion()
-        espcEmpleado.agregar_parametro("codigo",codigoEmpleado)
-        espcCliente= Especificacion()
-        espcCliente.agregar_parametro("codigoCliente",codigoCliente)
-        accesorios=list(inventario.buscar_accesorio(espc))
-        empleados= list(inventario.buscar_empleado(espcEmpleado))
-        clientes= list(inventario.buscar_cliente(espcCliente))
-        precioTotal= cantidad*accesorios[0].precio
-        venta= Venta(clientes[0],empleados[0],accesorios[0].nombreAccesorio,cantidad,accesorios[0].precio,precioTotal)
-        saver.guardar_venta(venta)
+            print("codigo accesorio: " + str(accesorio.codigoAccesorio) + "\n"
+                  + "Nombre: " + accesorio.nombreAccesorio + "\n"
+                  + "Descripcion: " + accesorio.descripcionAccesorio + "\n"
+                  + "Uso: " + accesorio.usoAccesorio + "\n"
+                  + "Cantidad diponible: " + str(accesorio.cantidad) + "\n"
+                  + "Precio: " + str(accesorio.precio))
+            # Actualizar la base de datos
+        codigoAccesorio = input("Ingrese el codigo del accesorio que se quiere comprar: ")
+        codigoCliente = input("Ingrese el codigo del cliente que realiza la compra: ")
+        codigoEmpleado = input("Ingrese el codigo del empleado que realiza la venta: ")
+        cantidad = input("Ingrese la cantidad de accesorios que desea comprar: ")
+        espc = Especificacion()
+        espc.agregar_parametro("codigoAccesorio", codigoAccesorio)
+        espcEmpleado = Especificacion()
+        espcEmpleado.agregar_parametro("codigo", codigoEmpleado)
+        espcCliente = Especificacion()
+        espcCliente.agregar_parametro("codigoCliente", codigoCliente)
+        accesorios = list(inventario.buscar_accesorio(espc))
+        empleados = list(inventario.buscar_empleado(espcEmpleado))
+        clientes = list(inventario.buscar_cliente(espcCliente))
+        precioTotal = cantidad * accesorios[0].precio
+        venta = Venta(clientes[0], empleados[0], accesorios[0].nombreAccesorio, cantidad, accesorios[0].precio,
+                      precioTotal)
+        saverVenta.guardar_venta(venta)
+
 
     def venderAlimento(inventario):
         for alimento in inventario.alimentos:
-                print("codigo alimento: "+alimento.codigoAlimento+"\n"
-                          +"Nombre: "+alimento.nombreProducto+"\n"
-                          +"Tipo de alimento: "+alimento.tipoAlimento+"\n"
-                          +"Contenido: "+alimento.cantidadContenido+"\n"
-                          +"Cantidad diponible: "+alimento.cantidad+"\n"
-                          +"Precio: "+alimento.precio)
-                    #Actualizar la base de datos
-        codigoAlimento=input("Ingrese el codigo del alimento que se quiere comprar: ")
-        codigoCliente= input("Ingrese el codigo del cliente que realiza la compra: ")
-        codigoEmpleado= input("Ingrese el codigo del empleado que realiza la venta: ")
-        cantidad=input("Ingrese la cantidad de alimentos que desea comprar: ")
-        espc= Especificacion()
-        espc.agregar_parametro("codigoAlimento",codigoAlimento)
-        espcEmpleado= Especificacion()
-        espcEmpleado.agregar_parametro("codigo",codigoEmpleado)
-        espcCliente= Especificacion()
-        espcCliente.agregar_parametro("codigoCliente",codigoCliente)
-        alimentos=list(inventario.buscar_alimento(espc))
-        empleados= list(inventario.buscar_empleado(espcEmpleado))
-        clientes= list(inventario.buscar_cliente(espcCliente))
-        precioTotal= cantidad*alimentos[0].precio
-        venta= Venta(clientes[0],empleados[0],alimentos[0].nombreProducto,cantidad,alimentos[0].precio,precioTotal)
-        saver.guardar_venta(venta)
+            print("codigo alimento: " + alimento.codigoAlimento + "\n"
+                  + "Nombre: " + alimento.nombreProducto + "\n"
+                  + "Tipo de alimento: " + alimento.tipoAlimento + "\n"
+                  + "Contenido: " + alimento.cantidadContenido + "\n"
+                  + "Cantidad diponible: " + alimento.cantidad + "\n"
+                  + "Precio: " + alimento.precio)
+            # Actualizar la base de datos
+        codigoAlimento = input("Ingrese el codigo del alimento que se quiere comprar: ")
+        codigoCliente = input("Ingrese el codigo del cliente que realiza la compra: ")
+        codigoEmpleado = input("Ingrese el codigo del empleado que realiza la venta: ")
+        cantidad = input("Ingrese la cantidad de alimentos que desea comprar: ")
+        espc = Especificacion()
+        espc.agregar_parametro("codigoAlimento", codigoAlimento)
+        espcEmpleado = Especificacion()
+        espcEmpleado.agregar_parametro("codigo", codigoEmpleado)
+        espcCliente = Especificacion()
+        espcCliente.agregar_parametro("codigoCliente", codigoCliente)
+        alimentos = list(inventario.buscar_alimento(espc))
+        empleados = list(inventario.buscar_empleado(espcEmpleado))
+        clientes = list(inventario.buscar_cliente(espcCliente))
+        precioTotal = cantidad * alimentos[0].precio
+        venta = Venta(clientes[0], empleados[0], alimentos[0].nombreProducto, cantidad, alimentos[0].precio,
+                      precioTotal)
+        saverVenta.guardar_venta(venta)
+
 
     """Este es el while principal donde se ejecutan todos los metodos previamente dichos dependiendo de la 
     decision del usuario"""
@@ -594,7 +622,7 @@ if __name__ == '__main__':
         ansPrin = input("Cual de las opciones quieres?: ")
         if ansPrin == "1":
             configuracion = generarConfiguracion()
-            agregar_informacion(saver, configuracion)
+            agregar_informacion(saverMascota, configuracion)
         elif ansPrin == "2":
             buscar_informacion()
         elif ansPrin == "3":

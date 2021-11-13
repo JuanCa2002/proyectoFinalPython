@@ -13,7 +13,7 @@ def test_buscar_empleado():
         'Mauricio': ['Peleaz', 'Arbelaez', 'Guiñez', 'Peralta'],
         'Camila': ['Hincapie', 'Castro', 'Fernandez'],
         'Catalina': ['Giraldo', 'Henao', 'Betancur', 'Barrientos']
-        }
+    }
     cargos = ['Gerente', 'auxiliar', 'empleado medio tiempo']
     direccionesEmpleados = ['Cra 15 #8-62', 'Cra 18 #4-86', 'Cra 22 #7-25', 'Cra 8 #1-12', 'Cra 20 #8-87']
     correoEmpleado = "correoEmpleado@hotmail.com"
@@ -49,7 +49,7 @@ def test_fuzzing_buscar_empleado():
         'Mauricio': ['Peleaz', 'Arbelaez', 'Guiñez', 'Peralta'],
         'Camila': ['Hincapie', 'Castro', 'Fernandez'],
         'Catalina': ['Giraldo', 'Henao', 'Betancur', 'Barrientos']
-        }
+    }
     cargos = ['Gerente', 'auxiliar', 'empleado medio tiempo']
     direccionesEmpleados = ['Cra 15 #8-62', 'Cra 18 #4-86', 'Cra 22 #7-25', 'Cra 8 #1-12', 'Cra 20 #8-87']
     correoEmpleado = "correoEmpleado@hotmail.com"
