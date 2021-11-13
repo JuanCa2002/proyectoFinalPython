@@ -13,7 +13,7 @@ def test_buscar_cliente():
         'Mauricio': ['Peleaz', 'Arbelaez', 'Guiñez', 'Peralta'],
         'Camila': ['Hincapie', 'Castro', 'Fernandez'],
         'Catalina': ['Giraldo', 'Henao', 'Betancur', 'Barrientos']
-        }
+    }
     direccionesClientes = ['Cra 15 #8-62', 'Cra 18 #4-86', 'Cra 22 #7-25', 'Cra 8 #1-12', 'Cra 20 #8-87']
     correoCliente = "correoCliente@hotmail.com"
     tiempoCliente = "4 años"
@@ -46,7 +46,7 @@ def test_fuzzing_buscar_cliente():
         'Mauricio': ['Peleaz', 'Arbelaez', 'Guiñez', 'Peralta'],
         'Camila': ['Hincapie', 'Castro', 'Fernandez'],
         'Catalina': ['Giraldo', 'Henao', 'Betancur', 'Barrientos']
-        }
+    }
     direccionesClientes = ['Cra 15 #8-62', 'Cra 18 #4-86', 'Cra 22 #7-25', 'Cra 8 #1-12', 'Cra 20 #8-87']
     correoCliente = "correoCliente@hotmail.com"
     generosClientes = ['Masculino', 'Femenino']

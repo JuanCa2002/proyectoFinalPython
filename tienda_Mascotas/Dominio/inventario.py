@@ -14,7 +14,7 @@ class Inventario:
         self.empleados = []
         self.alimentos = []
         self.accesorios = []
-        self.ventas=[]
+        self.ventas = []
 
     def agregar_mascota(self, mascota):
         if type(mascota) == Mascota:
