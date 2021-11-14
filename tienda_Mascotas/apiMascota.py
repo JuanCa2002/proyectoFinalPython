@@ -51,7 +51,7 @@ class mascota():
         mascota = mascota_repositorio.cargar_mascota(codigoMascota)
         mascota.update(req.media)
         mascota.codigoMascota = codigoMascota
-        mascota.guardar()
+        mascota.guardar_actualizar()
         resp.body = mascota.__dict__
 
     def on_delete(self, req, resp, codigoMascota):
@@ -67,7 +67,8 @@ def iniciar() -> API:
     api = API()
     api.add_route("/mascota/", mascota())
     api.add_route("/mascota_guardar/", mascota())
-    api.add_route("/mascota_eliminar/{codigoMascota}/", mascota())
+    api.add_route("/mascota_actualizar/{codigoMascota}", mascota())
+    api.add_route("/mascota_eliminar/{codigoMascota}", mascota())
     return api
 
 

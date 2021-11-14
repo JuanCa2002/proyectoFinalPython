@@ -54,5 +54,3 @@ class Cliente(Persona):
         from tienda_Mascotas.Infraestructura.persistenciaCliente import PersistenciaCliente
         persisten_cliente = PersistenciaCliente()
         persisten_cliente.eliminar_cliente(codigoCliente)
-
-

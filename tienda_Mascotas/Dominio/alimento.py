@@ -56,5 +56,3 @@ class Alimento(ElementoCompra):
         from tienda_Mascotas.Infraestructura.persistenciaAlimento import PersistenciaAlimento
         persisten_alimento = PersistenciaAlimento()
         persisten_alimento.eliminar_alimento(codigoAlimento)
-
-

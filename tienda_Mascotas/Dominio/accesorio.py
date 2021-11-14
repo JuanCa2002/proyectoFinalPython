@@ -51,4 +51,3 @@ class Accesorio(ElementoCompra):
         from tienda_Mascotas.Infraestructura.persistenciaAccesorio import PersistenciaAccesorio
         persisten_accesorio = PersistenciaAccesorio()
         persisten_accesorio.eliminar_accesorio(codigoAccesorio)
-
