@@ -49,7 +49,7 @@ class cliente():
         cliente = cliente_repositorio.cargar_cliente(codigoCliente)
         cliente.update(req.media)
         cliente.codigoCliente = codigoCliente
-        cliente.guardar()
+        cliente.guardar_actualizar()
         resp.body = cliente.__dict__
 
     def on_delete(self, req, resp, codigoCliente):
@@ -65,6 +65,7 @@ def iniciar() -> API:
     api = API()
     api.add_route("/cliente/", cliente())
     api.add_route("/cliente_guardar/", cliente())
+    api.add_route("/cliente_actualizar/{codigoCliente}", cliente())
     api.add_route("/cliente_eliminar/{codigoCliente}/", cliente())
     return api
 

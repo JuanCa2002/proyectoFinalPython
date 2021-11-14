@@ -48,7 +48,7 @@ class accesorio():
         accesorio = accesorio_repositorio.cargar_accesorio(codigoAccesorio)
         accesorio.update(req.media)
         accesorio.codigoAccesorio = codigoAccesorio
-        accesorio.guardar()
+        accesorio.guardar_actualizar()
         resp.body = accesorio.__dict__
 
     def on_delete(self, req, resp, codigoAccesorio):
@@ -64,7 +64,8 @@ def iniciar() -> API:
     api = API()
     api.add_route("/accesorio/", accesorio())
     api.add_route("/accesorio_guardar/", accesorio())
-    api.add_route("/accesorio_eliminar/{codigoAccesorio}/", accesorio())
+    api.add_route("/accesorio_actualizar/{codigoAccesorio}",accesorio())
+    api.add_route("/accesorio_eliminar/{codigoAccesorio}", accesorio())
     return api
 
 

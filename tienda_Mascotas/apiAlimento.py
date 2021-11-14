@@ -49,7 +49,7 @@ class alimento():
         alimento = alimento_repositorio.cargar_alimento(codigoAlimento)
         alimento.update(req.media)
         alimento.codigoAlimento = codigoAlimento
-        alimento.guardar()
+        alimento.guardar_actualizar()
         resp.body = alimento.__dict__
 
     def on_delete(self, req, resp, codigoAlimento):
@@ -65,7 +65,8 @@ def iniciar() -> API:
     api = API()
     api.add_route("/alimento/", alimento())
     api.add_route("/alimento_guardar/", alimento())
-    api.add_route("/alimento_eliminar/{codigoAlimento}/", alimento())
+    api.add_route("/alimento_actualizar/{codigoAlimento}", alimento())
+    api.add_route("/alimento_eliminar/{codigoAlimento}", alimento())
     return api
 
 

@@ -49,7 +49,7 @@ class empleado():
         empleado = empleado_repositorio.cargar_empleado(codigoEmpleado)
         empleado.update(req.media)
         empleado.codigo = codigoEmpleado
-        empleado.guardar()
+        empleado.guardar_actualizar()
         resp.body = empleado.__dict__
 
     def on_delete(self, req, resp, codigoEmpleado):
@@ -65,7 +65,8 @@ def iniciar() -> API:
     api = API()
     api.add_route("/empleado/", empleado())
     api.add_route("/empleado_guardar/", empleado())
-    api.add_route("/empleado_eliminar/{codigoEmpleado}/", empleado())
+    api.add_route("/empleado_actualizar/{codigoEmpleado}", empleado())
+    api.add_route("/empleado_eliminar/{codigoEmpleado}", empleado())
     return api
 
 

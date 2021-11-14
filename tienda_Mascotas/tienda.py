@@ -5,34 +5,71 @@ from tienda_Mascotas.Dominio.accesorio import Accesorio
 from tienda_Mascotas.Dominio.cliente import Cliente
 from tienda_Mascotas.Dominio.empleado import Empleado
 from tienda_Mascotas.Dominio.venta import Venta
+
 from tienda_Mascotas.Infraestructura.persistenciaAccesorio import PersistenciaAccesorio
 from tienda_Mascotas.Infraestructura.persistenciaAlimento import PersistenciaAlimento
 from tienda_Mascotas.Infraestructura.persistenciaCliente import PersistenciaCliente
 from tienda_Mascotas.Infraestructura.persistenciaEmpleado import PersistenciaEmpleado
 from tienda_Mascotas.Infraestructura.persistenciaMascota import PersistenciaMascota
 from tienda_Mascotas.Dominio.especificacion import Especificacion
+import requests
 from tienda_Mascotas.Infraestructura.configuracion import Configuracion
 import os
 
 from tienda_Mascotas.Infraestructura.persistenciaVenta import PersistenciaVenta
 
+class Tienda():
+
+    def generarInventario(self):
+        saverMascota = PersistenciaMascota()
+        saverMascota.connect()
+        saverAccesorios=PersistenciaAccesorio()
+        saverAccesorios.connect()
+        saverAlimentos=PersistenciaAlimento()
+        saverAlimentos.connect()
+        saverCliente=PersistenciaCliente()
+        saverCliente.connect()
+        saverEmpleado=PersistenciaEmpleado()
+        saverEmpleado.connect()
+        saverVenta=PersistenciaVenta()
+        saverVenta.connect()
+        inventario = Inventario()
+        mascotas = saverMascota.consultar_tabla_mascota()
+        alimentos = saverAlimentos.consultar_tabla_alimento()
+        accesorios = saverAccesorios.consultar_tabla_accesorio()
+        clientes = saverCliente.consultar_tabla_cliente()
+        empleados = saverEmpleado.consultar_tabla_empleado()
+        for mascota in mascotas:
+            inventario.agregar_mascota(mascota)
+        for alimento in alimentos:
+            inventario.agregar_alimento(alimento)
+        for accesorio in accesorios:
+            inventario.agregar_accesorio(accesorio)
+        for cliente in clientes:
+            inventario.agregar_cliente(cliente)
+        for empleado in empleados:
+            inventario.agregar_empleado(empleado)
+        return inventario
+
 if __name__ == '__main__':
+
 
     """Primero declaramos la persistencia y luego utilizamos el metodo saver.connect cuando iniciamos la aplicacion
     esto genera la base de datos sqlite y las tablas de la entitades que necesitamos con sus atributos"""
 
     saverMascota = PersistenciaMascota()
     saverMascota.connect()
-    saverAccesorios=PersistenciaAccesorio()
+    saverAccesorios = PersistenciaAccesorio()
     saverAccesorios.connect()
-    saverAlimentos=PersistenciaAlimento()
+    saverAlimentos = PersistenciaAlimento()
     saverAlimentos.connect()
-    saverCliente=PersistenciaCliente()
+    saverCliente = PersistenciaCliente()
     saverCliente.connect()
-    saverEmpleado=PersistenciaEmpleado()
+    saverEmpleado = PersistenciaEmpleado()
     saverEmpleado.connect()
-    saverVenta=PersistenciaVenta()
+    saverVenta = PersistenciaVenta()
     saverVenta.connect()
+
 
     # def actualizarMascota(inventario):
     #     espec = Especificacion()
@@ -43,11 +80,7 @@ if __name__ == '__main__':
 
     # Metodo generar configuracion, el cual trae la configuracion que esta guardada en archivo plano json
 
-    def generarConfiguracion():
-        for file in os.listdir("files"):
-            if '1.json' in file:
-                configuracion = PersistenciaMascota.load_json_configuracion(file)
-        return configuracion
+
 
 
     """En el metodo generarInventario cargamos los datos que estan guardados tanto en archivos planos json y 
@@ -74,19 +107,6 @@ if __name__ == '__main__':
         ventas = saverVenta.consultar_tabla_venta(inventario)
         for venta in ventas:
             inventario.agregar_venta(venta)
-        for file in os.listdir("files"):
-            if '1.json' in file:
-                configuracion = PersistenciaMascota.load_json_configuracion(file)
-            elif '.jsonMascota' in file:
-                inventario.agregar_mascota(PersistenciaMascota.load_json_mascota(file))
-            elif '.jsonEmpleado' in file:
-                inventario.agregar_empleado(PersistenciaEmpleado.load_json_empleado(file))
-            elif '.jsonCliente' in file:
-                inventario.agregar_cliente(PersistenciaCliente.load_json_cliente(file))
-            elif '.jsonAlimento' in file:
-                inventario.agregar_alimento(PersistenciaAlimento.load_json_alimento(file))
-            elif '.jsonAccesorio' in file:
-                inventario.agregar_accesorio(PersistenciaAccesorio.load_json_accesorio(file))
 
         return inventario
 
@@ -96,7 +116,7 @@ if __name__ == '__main__':
     esta lo guarda como un archivo plano json o base sqlite"""
 
 
-    def agregar_informacion(saver, configuracion):
+    def agregar_informacion():
         inventario = generarInventario()
         ans = True
         while ans:
@@ -109,8 +129,7 @@ if __name__ == '__main__':
         3.Agregar nuevo accesorio de mascotas.
         4.Agregar nuevo cliente.
         5.Agregar nuevo empleado.
-        6.Configuracion.
-        7.Regresar al menu principal.
+        6.Regresar al menu principal.
         """)
             ans = input("Cual de las opciones quieres?: ")
             if ans == "1":
@@ -124,13 +143,19 @@ if __name__ == '__main__':
                 mascota = Mascota(codigoMascota, tipo_mascota, raza, nombre, edad, precioMascota, cantidadMascota)
                 try:
                     inventario.agregar_mascota(mascota)
-                    if configuracion.estado == "archivo plano json":
-                        PersistenciaMascota.save_json_mascota(mascota)
-                        print("\n Se agrego la mascota con exito en js")
-                    else:
-                        mascota.guardar(mascota)
-                        # saver.guardar_mascota(mascota)
-                        print("\n Se agrego la mascota con exito en bd")
+                    url = "http://localhost:2020/mascota_guardar/"
+                    body = {
+                        "codigoMascota":codigoMascota,
+                        "tipoMascota": tipo_mascota,
+                        "raza": raza,
+                        "edad": edad,
+                        "nombre": nombre,
+                        "cantidad":cantidadMascota,
+                        "precio": precioMascota,
+                    }
+                    print("\n Se agrego la mascota con exito en bd")
+                    response = requests.request("POST", url,data=body)
+                    print(response.status_code)
                 except Exception as ex:
                     print(ex)
 
@@ -146,12 +171,18 @@ if __name__ == '__main__':
                                     precioAlimento)
                 try:
                     inventario.agregar_alimento(alimento)
-                    if configuracion.estado == "archivo plano json":
-                        PersistenciaAlimento.save_json_alimento(alimento)
-                        print("\n Se agrego el alimento para mascotas con exito en js")
-                    else:
-                        saverAlimentos.guardar_alimento(alimento)
-                        print("\n Se agrego el alimento para mascotas con exito en bd")
+                    url = "http://localhost:2020/alimento_guardar/"
+                    body = {
+                        "codigoAlimento":codigoAlimento,
+                        "tipoAlimento":tipo_alimento ,
+                        "nombre": nombreAlimento,
+                        "cantidadAlimento": cantidadAlimento,
+                        "cantidadContenido":cantidadContenido,
+                        "precio": precioAlimento,
+                    }
+                    print("\n Se agrego el alimento con exito en bd")
+                    response = requests.request("POST", url,data=body)
+                    print(response.status_code)
                 except Exception as ex:
                     print(ex)
             elif ans == "3":
@@ -165,35 +196,50 @@ if __name__ == '__main__':
                                       descripcionAccesorio, usoAccesorio)
                 try:
                     inventario.agregar_accesorio(accesorio)
-                    if configuracion.estado == "archivo plano json":
-                        PersistenciaAccesorio.save_json_accesorio(accesorio)
-                        print("\n Se agrego el accesorio de mascotas con exito en js")
-                    else:
-                        saverAccesorios.guardar_accesorio(accesorio)
-                        print("\n Se agrego el accesorio de mascotas con exito en bd")
+                    url = "http://localhost:2020/accesorio_guardar/"
+                    body = {
+                        "codigoAccesorio":codigoAccesorio,
+                        "nombre": nombreAccesorio,
+                        "precioAccesorio":descripcionAccesorio,
+                        "cantidadAccesorio": usoAccesorio,
+                        "descripcionAccesorio": precioAccesorio,
+                        "usoAccesorio": cantidadAccesorio,
+                    }
+                    response = requests.request("POST", url,data=body)
+                    print(response.status_code)
+                    print("\n Se agrego el accesorio de mascotas con exito en bd")
                 except Exception as ex:
                     print(ex)
 
             elif ans == "4":
                 codigoCliente = str(input("Ingrse el codigo del cliente:"))
                 nombreCliente = str(input("Ingrese el nombre del cliente:"))
-                cedulaEmpleado = str(input("Ingrese la cedula del empleado:"))
+                cedulaCliente = str(input("Ingrese la cedula del cliente:"))
                 apellidoCliente = str(input("Ingrese el apellido del cliente:"))
                 generoCliente = str(input("Ingrese el genero del cliente:"))
                 edadCliente = int(input("Ingrese la edad del cliente"))
                 direccionCliente = str(input("Ingrese la direccion de residencia del cliente:"))
                 correoCliente = str(input("Ingrese el correo de contacto del cliente:"))
                 tiempoCliente = str(input("Ingrese el tiempo que lleva la persona siendo su cliente:"))
-                cliente = Cliente(codigoCliente, nombreCliente, apellidoCliente, cedulaEmpleado, generoCliente
+                cliente = Cliente(codigoCliente, nombreCliente, apellidoCliente, cedulaCliente, generoCliente
                                   , direccionCliente, correoCliente, edadCliente, tiempoCliente)
                 try:
                     inventario.agregar_cliente(cliente)
-                    if configuracion.estado == "archivo plano json":
-                        PersistenciaCliente.save_json_cliente(cliente)
-                        print("\n Se agrego el nuevo cliente con exito en js")
-                    else:
-                        saverCliente.guardar_cliente(cliente)
-                        print("\n Se agrego el nuevo cliente con exito en bd")
+                    url = "http://localhost:2020/cliente_guardar/"
+                    body = {
+                        "codigoCliente":codigoCliente,
+                        "nombre": nombreCliente,
+                        "apellido":apellidoCliente,
+                        "cedula": cedulaCliente,
+                        "genero": generoCliente,
+                        "direccion": direccionCliente,
+                        "correo": correoCliente,
+                        "edad": edadCliente,
+                        "tiempoCliente": tiempoCliente,
+                    }
+                    response = requests.request("POST", url,data=body)
+                    print(response.status_code)
+                    print("\n Se agrego el nuevo cliente con exito en bd")
                 except Exception as ex:
                     print(ex)
 
@@ -214,39 +260,27 @@ if __name__ == '__main__':
                                     edadEmpleado, direccionEmpleado, correoEmpleado, horarioEmpleado)
                 try:
                     inventario.agregar_empleado(empleado)
-                    if configuracion.estado == "archivo plano json":
-                        PersistenciaEmpleado.save_json_empleado(empleado)
-                        print("\n Se agrego el nuevo empleado con exito en js")
-                    else:
-                        saverEmpleado.guardar_empleado(empleado)
-                        print("\n Se agrego el nuevo empleado con exito en bd")
+                    url = "http://localhost:2020/empleado_guardar/"
+                    body = {
+                        "codigo":codigoEmpleado,
+                        "nombre": nombreEmpleado,
+                        "apellido":apellidoEmpleado,
+                        "cedula": cedulaEmpleado,
+                        "genero": generoEmpleado,
+                        "direccion": direccionEmpleado,
+                        "correo": correoEmpleado,
+                        "edad": edadEmpleado,
+                        "cargo": cargoEmpleado,
+                        "salario":salarioEmpleado,
+                        "horario": horarioEmpleado,
+                    }
+                    response = requests.request("POST", url,data=body)
+                    print(response.status_code)
+                    print("\n Se agrego el nuevo empleado con exito en bd")
                 except Exception as ex:
                     print(ex)
 
             elif ans == "6":
-                opcion = True
-                while opcion:
-                    print("En estos momentos los elemento se guardan por medio de:" + " " + str(configuracion.estado))
-                    print("""Elija como quiere guardar sus elementos
-                           1.Archivos planos tipo json
-                           2.Base de datos sqlite
-                           3.Regresar.
-                           """)
-                    opcion = input("Que opcion elige?:")
-                    if opcion == "1":
-                        configuracion.cambiarEstadoConfiguracion("archivo plano json")
-                        PersistenciaMascota.save_json_configuracion(configuracion)
-                        print("Se cambio la configuracion a archivos planos de tipo json")
-                    elif opcion == "2":
-                        configuracion.cambiarEstadoConfiguracion("Base de datos sqlite")
-                        PersistenciaMascota.save_json_configuracion(configuracion)
-                        print("Se cambio la configuracion a Base de datos sqlite")
-                    elif opcion == "3":
-                        print("Se guardaron los cambios")
-                        opcion = False
-                    elif opcion != "":
-                        print("Opcion invalida")
-            elif ans == "7":
                 ans = False
             elif ans != "":
                 print("\n Opcion no es valida, verifique el numero ingresado")
@@ -256,6 +290,269 @@ if __name__ == '__main__':
     los atributos que quiera. Dependiendo de la clase que elija, se despliegan una serie de caracteristicas. El usuario
     escoje el numero de caracteristicas, el numero de referencia a la caracteristica y por ultimo el valor de esta,
     luego de esto se visualiza la representacion del objeto en caso de que exista"""
+
+    def actualizarInformacion():
+        inventario = generarInventario()
+        ansAct = True
+        while ansAct:
+            print("""
+        BIENVENIDO A LA TIENDA DE MASCOTAS, ELIGE ENTRE NUESTRAS OPCIONES,
+        PARA MANTENER LA TIENDA ORDENADA Y ACTUALIZAR SUS ELEMENTOS
+        
+        1.actualizar mascota.
+        2.actualizar alimento de mascotas.
+        3.actualizar accesorio de mascotas.
+        4.actualizar cliente.
+        5.actualizar empleado.
+        6.Regresar al menu principal.
+        """)
+            ansAct = input("Cual de las opciones quieres?: ")
+            if ansAct == "1":
+                codigoMascota=input("Ingrese el codigo de la mascota que quiere editar:")
+                espc=Especificacion()
+                espc.agregar_parametro("codigoMascota",codigoMascota)
+                mascotas=list(inventario.buscar_mascota(espc))
+                print(len(mascotas))
+                atributos={}
+                atributos["codigoMascota"]=codigoMascota
+                atributos["tipoMascota"]=mascotas[0].tipoMascota
+                atributos["raza"]= mascotas[0].raza
+                atributos["edad"]= mascotas[0].edad
+                atributos["nombre"]=mascotas[0].nombre
+                atributos["cantidad"]=mascotas[0].cantidad
+                atributos["precio"]=mascotas[0].precio
+                cantidadAtributos= int(input("Ingrese la cantidad de caracteristicas de la mascota que quiere editar:"))
+                for i in range(0,cantidadAtributos):
+                    caracteristica=input("Ingrese la caracteristica que quiere editar:")
+                    valor= input("Ingrese el valor por el cual quiere reemplazarla:")
+                    atributos[caracteristica]=valor
+                url = "http://localhost:2020/mascota_actualizar/"+codigoMascota
+                body = {
+
+                    "tipoMascota":atributos["tipoMascota"] ,
+                    "raza": atributos["raza"],
+                    "edad": atributos["edad"],
+                    "nombre": atributos["nombre"],
+                    "cantidad":atributos["cantidad"],
+                    "precio": atributos["precio"],
+
+
+                }
+                response = requests.request("PUT", url,data=body)
+                print(response.status_code)
+            elif ansAct== "2":
+                codigoAlimento=input("Ingrese el codigo del alimento que quiere editar:")
+                espc=Especificacion()
+                espc.agregar_parametro("codigoAlimento",codigoAlimento)
+                alimento=list(inventario.buscar_alimento(espc))
+                print(len(alimento))
+                atributos={}
+                atributos["codigoAlimento"]=codigoAlimento
+                atributos["tipoAlimento"]=alimento[0].tipoAlimento
+                atributos["nombreProducto"]= alimento[0].nombreProducto
+                atributos["cantidadAlimento"]= alimento[0].cantidadAlimento
+                atributos["cantidadContenido"]=alimento[0].cantidadContenido
+                atributos["precio"]=alimento[0].precio
+                cantidadAtributos= int(input("Ingrese la cantidad de caracteristicas del alimento que quiere editar:"))
+                for i in range(0,cantidadAtributos):
+                    caracteristica=input("Ingrese la caracteristica que quiere editar:")
+                    valor= input("Ingrese el valor por el cual quiere reemplazarla:")
+                    atributos[caracteristica]=valor
+                url = "http://localhost:2020/alimento_actualizar/"+codigoAlimento
+                body = {
+                    "tipoAlimento": atributos["tipoAlimento"],
+                    "nombreProducto": atributos["nombreProducto"],
+                    "cantidadAlimento": atributos["cantidadAlimento"],
+                    "cantidadContenido":atributos["cantidadContenido"],
+                    "precio": atributos["precio"],
+                }
+                response = requests.request("PUT", url,data=body)
+                print(response.status_code)
+            elif ansAct== "3":
+                codigoAccesorio=input("Ingrese el codigo del accesorio que quiere editar:")
+                espc=Especificacion()
+                espc.agregar_parametro("codigoAccesorio",codigoAccesorio)
+                accesorio=list(inventario.buscar_accesorio(espc))
+                print(len(accesorio))
+                atributos={}
+                atributos["codigoAccesorio"]=codigoAccesorio
+                atributos["nombreAccesorio"]= accesorio[0].nombreAccesorio
+                atributos["descripcionAccesorio"]= accesorio[0].descripcionAccesorio
+                atributos["cantidadAccesorio"]=accesorio[0].cantidad
+                atributos["precioAccesorio"]=accesorio[0].precio
+                atributos["usoAccesorio"]=accesorio[0].usoAccesorio
+                cantidadAtributos= int(input("Ingrese la cantidad de caracteristicas del accesorio que quiere editar:"))
+                for i in range(0,cantidadAtributos):
+                    caracteristica=input("Ingrese la caracteristica que quiere editar:")
+                    valor= input("Ingrese el valor por el cual quiere reemplazarla:")
+                    atributos[caracteristica]=valor
+                url = "http://localhost:2020/accesorio_actualizar/"+codigoAccesorio
+                body = {
+                    "nombreAccesorio": atributos["nombreAccesorio"],
+                    "precioAccesorio":atributos["precioAccesorio"],
+                    "cantidadAccesorio": atributos["cantidadAccesorio"],
+                    "descripcionAccesorio": atributos["descripcionAccesorio"],
+                    "usoAccesorio": atributos["usoAccesorio"],
+                }
+                response = requests.request("PUT", url,data=body)
+                print(response.status_code)
+            elif ansAct== "4":
+                codigoCliente=input("Ingrese el codigo del cliente que quiere editar:")
+                espc=Especificacion()
+                espc.agregar_parametro("codigoCliente",codigoCliente)
+                cliente=list(inventario.buscar_cliente(espc))
+                print(len(cliente))
+                atributos={}
+                atributos["codigoCliente"]=codigoCliente
+                atributos["nombre"]= cliente[0].nombre
+                atributos["apellido"]= cliente[0].apellido
+                atributos["cedula"]=cliente[0].cedula
+                atributos["genero"]=cliente[0].genero
+                atributos["direccion"]=cliente[0].direccion
+                atributos["correo"]=cliente[0].correo
+                atributos["edad"]=cliente[0].edad
+                atributos["tiempoCliente"]=cliente[0].tiempoCliente
+                cantidadAtributos= int(input("Ingrese la cantidad de caracteristicas del cliente que quiere editar:"))
+                for i in range(0,cantidadAtributos):
+                    caracteristica=input("Ingrese la caracteristica que quiere editar:")
+                    valor= input("Ingrese el valor por el cual quiere reemplazarla:")
+                    atributos[caracteristica]=valor
+                url = "http://localhost:2020/cliente_actualizar/"+codigoCliente
+                body = {
+                    "nombre": atributos["nombre"],
+                    "apellido":atributos["apellido"],
+                    "cedula": atributos["cedula"],
+                    "genero": atributos["genero"],
+                    "direccion": atributos["direccion"],
+                    "correo": atributos["correo"],
+                    "edad": atributos["edad"],
+                    "tiempoCliente": atributos["tiempoCliente"],
+                }
+                response = requests.request("PUT", url,data=body)
+                print(response.status_code)
+
+            elif ansAct== "5":
+                codigoEmpleado=input("Ingrese el codigo del empleado que quiere editar:")
+                espc=Especificacion()
+                espc.agregar_parametro("codigo",codigoEmpleado)
+                empleado=list(inventario.buscar_empleado(espc))
+                print(len(empleado))
+                atributos={}
+                atributos["codigo"]=codigoEmpleado
+                atributos["nombre"]= empleado[0].nombre
+                atributos["apellido"]= empleado[0].apellido
+                atributos["cedula"]=empleado[0].cedula
+                atributos["genero"]=empleado[0].genero
+                atributos["direccion"]=empleado[0].direccion
+                atributos["correo"]=empleado[0].correo
+                atributos["edad"]=empleado[0].edad
+                atributos["cargo"]=empleado[0].cargo
+                atributos["salario"]=empleado[0].salario
+                atributos["horario"]=empleado[0].horario
+                cantidadAtributos= int(input("Ingrese la cantidad de caracteristicas del cliente que quiere editar:"))
+                for i in range(0,cantidadAtributos):
+                    caracteristica=input("Ingrese la caracteristica que quiere editar:")
+                    valor= input("Ingrese el valor por el cual quiere reemplazarla:")
+                    atributos[caracteristica]=valor
+                url = "http://localhost:2020/empleado_actualizar/"+codigoEmpleado
+                body = {
+                    "nombre": atributos["nombre"],
+                    "apellido":atributos["apellido"],
+                    "cedula": atributos["cedula"],
+                    "genero": atributos["genero"],
+                    "direccion": atributos["direccion"],
+                    "correo": atributos["correo"],
+                    "edad": atributos["edad"],
+                    "cargo": atributos["cargo"],
+                    "salario": atributos["salario"],
+                    "horario": atributos["horario"],
+                }
+                response = requests.request("PUT", url,data=body)
+                print(response.status_code)
+            else:
+                ansAct=False
+
+    def eliminarInformacion():
+        inventario = generarInventario()
+        ansDel = True
+        while ansDel:
+            print("""
+        BIENVENIDO A LA TIENDA DE MASCOTAS, ELIGE ENTRE NUESTRAS OPCIONES,
+        PARA MANTENER LA TIENDA ORDENADA Y ELIMINAR SUS ELEMENTOS
+        
+        1.eliminar una mascota.
+        2.eliminar alimento de mascotas.
+        3.eliminar accesorio de mascotas.
+        4.eliminar cliente.
+        5.eliminar empleado.
+        6.Regresar al menu principal.
+        """)
+            ansDel = input("Cual de las opciones quieres?: ")
+            if ansDel == "1":
+                codigoMascota=input("Ingrese el codigo de la mascota que quiere eliminar:")
+                espc=Especificacion()
+                espc.agregar_parametro("codigoMascota",codigoMascota)
+                mascota=list(inventario.buscar_mascota(espc))
+                if len(mascota)!=0:
+                    print(mascota)
+                    print("""Esta seguro de eliminar esta mascota?
+                          1. Si
+                          2. No""")
+                    confirmacion=input("cual de las opciones quieres?:")
+                    if confirmacion== "1":
+                        url = "http://localhost:2020/mascota_eliminar/"+codigoMascota
+                        response = requests.request("DELETE", url)
+                        print(response.status_code)
+                    elif confirmacion== "2":
+                        pass
+                    else:
+                        print("Ingrese una de las opciones correspondientes!")
+                else:
+                    print("No hay mascotas registradas con este codigo")
+            elif ansDel == "2":
+                codigoAlimento=input("Ingrese el codigo del alimento que quiere eliminar:")
+                espc=Especificacion()
+                espc.agregar_parametro("codigoAlimento",codigoAlimento)
+                alimento=list(inventario.buscar_alimento(espc))
+                if len(alimento)!=0:
+                    print(alimento)
+                    print("""Esta seguro de eliminar este alimento?
+                          1. Si
+                          2. No""")
+                    confirmacion=input("cual de las opciones quieres?:")
+                    if confirmacion== "1":
+                        url = "http://localhost:2020/alimento_eliminar/"+codigoAlimento
+                        response = requests.request("DELETE", url)
+                        print(response.status_code)
+                    elif confirmacion== "2":
+                        pass
+                    else:
+                        print("Ingrese una de las opciones correspondientes!")
+                else:
+                    print("No hay alimentos registrados con este codigo")
+            elif ansDel == "3":
+                codigoAccesorio=input("Ingrese el codigo del accesorio que quiere eliminar:")
+                espc=Especificacion()
+                espc.agregar_parametro("codigoAccesorio",codigoAccesorio)
+                accesorio=list(inventario.buscar_accesorio(espc))
+                if len(accesorio)!=0:
+                    print(accesorio)
+                    print("""Esta seguro de eliminar este accesorio?
+                          1. Si
+                          2. No""")
+                    confirmacion=input("cual de las opciones quieres?:")
+                    if confirmacion== "1":
+                        url = "http://localhost:2020/accesorio_eliminar/"+codigoAccesorio
+                        response = requests.request("DELETE", url)
+                        print(response.status_code)
+                    elif confirmacion== "2":
+                        pass
+                    else:
+                        print("Ingrese una de las opciones correspondientes!")
+                else:
+                    print("No hay accesorios registrados con este codigo")
+
+
 
 
     def buscar_informacion():
@@ -614,18 +911,22 @@ if __name__ == '__main__':
             PARA AGREGAR, BUSCAR O VENDER UN ELEMENTO DE TU TIENDA:
             
             1.Agregar elemento.
-            2.Buscar elemento.
-            3.Vender elemento.
-            4.Ver ventas.
-            5.Terminar y salir.
+            2.Actualizar elemento.
+            3.Eliminar elemento.
+            4.Buscar elemento.
+            5.Vender elemento.
+            6.Terminar y salir.
             """)
         ansPrin = input("Cual de las opciones quieres?: ")
         if ansPrin == "1":
-            configuracion = generarConfiguracion()
-            agregar_informacion(saverMascota, configuracion)
+            agregar_informacion()
         elif ansPrin == "2":
-            buscar_informacion()
+            actualizarInformacion()
         elif ansPrin == "3":
+            eliminarInformacion()
+        elif ansPrin == "4":
+            buscar_informacion()
+        elif ansPrin == "5":
             generarVenta()
         elif ansPrin != "":
             print("\n Nos vemos hasta la proxima!")
