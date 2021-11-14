@@ -2,13 +2,18 @@ import falcon
 import waitress
 from falcon import API
 
-from tienda_Mascotas.Dominio.venta import Venta
+
 from tienda_Mascotas.Infraestructura.persistenciaVenta import PersistenciaVenta
+from tienda_Mascotas.tienda import Tienda
+
 
 class venta():
+
     def on_get(self, req, resp):
+        tienda= Tienda()
+        inventario= tienda.generarInventario()
         db = PersistenciaVenta()
-        ventas = db.consultar_tabla_venta()
+        ventas = db.consultar_tabla_venta(inventario)
         template = """<!-- #######  YAY, I AM THE SOURCE EDITOR! #########-->
                     <h1 style="color: #5e9ca0;">La tienda del CAMI</h1>
                     <h2 style="color: #2e6c80;">Ventas:</h2>
@@ -39,10 +44,7 @@ class venta():
         resp.content_type = 'text/html'
         resp.status = falcon.HTTP_OK
 
-    def on_post(self, req, resp):
-        venta = Venta(**req.media)
-        venta.guardar(venta)
-        resp.status = falcon.HTTP_CREATED
+
 
 
 def iniciar() -> API:

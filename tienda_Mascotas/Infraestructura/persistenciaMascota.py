@@ -82,8 +82,6 @@ class PersistenciaMascota:
         text_open.close()
         return mascota
 
-
-
     @classmethod
     def save_json_configuracion(cls, configuracion: Configuracion):
         text_open = open("files/" + str(configuracion.codigoUnico) + '.json', mode='w')
