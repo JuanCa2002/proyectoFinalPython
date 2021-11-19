@@ -1,4 +1,7 @@
 import uuid
+
+import jsonpickle
+
 from tienda_Mascotas.Dominio.elementoCompra import ElementoCompra
 
 
@@ -27,3 +30,29 @@ class Alimento(ElementoCompra):
             if k not in dict_alimento or dict_alimento[k] != especificacion.get_value(k):
                 return False
         return True
+
+    def guardar(self, alimento):
+        from tienda_Mascotas.Infraestructura.persistenciaAlimento import PersistenciaAlimento
+        persitencia_alimento = PersistenciaAlimento()
+        persitencia_alimento.guardar_alimento(alimento)
+
+    def guardar_actualizar(self):
+        self._actualizar(self.codigoAlimento)
+
+    def _actualizar(self, codigoAlimento):
+        from tienda_Mascotas.Infraestructura.persistenciaAlimento import PersistenciaAlimento
+        persitencia_alimento = PersistenciaAlimento()
+        persitencia_alimento.actualizar_alimento(self, codigoAlimento)
+
+    def update(self, dict_params):
+        self.codigoAlimento = dict_params.get('codigoAlimento', self.codigoAlimento)
+        self.tipoAlimento = dict_params.get('tipoAlimento', self.tipoAlimento)
+        self.nombreProducto = dict_params.get('nombreProducto', self.nombreProducto)
+        self.cantidadAlimento = dict_params.get('cantidadAlimento', self.cantidadAlimento)
+        self.cantidadContenido = dict_params.get('cantidadContenido', self.cantidadContenido)
+        self.precio = dict_params.get('precio', self.precio)
+
+    def eliminar(self, codigoAlimento):
+        from tienda_Mascotas.Infraestructura.persistenciaAlimento import PersistenciaAlimento
+        persisten_alimento = PersistenciaAlimento()
+        persisten_alimento.eliminar_alimento(codigoAlimento)
