@@ -23,14 +23,14 @@ class PersistenciaVenta:
         except sqlite3.OperationalError as ex:
             pass
 
-    def guardar_venta(self, venta: Venta):
+    def guardar_venta(self, venta: Venta,codigoCliente,codigoEmpleado):
         cursor = self.con.cursor()
         query = "insert into VENTA( cantidadVenta ," \
                 " precioUnidad , precioTotal ,nombreProducto ," \
                 " codigoCliente,codigo) values(" \
                 f" ?,?,?,?,?,?)"
         cursor.execute(query, (venta.cantidadVenta, venta.precioUnidad, venta.precioTotal,
-                               venta.nombreProducto, str(venta.cliente.codigoCliente), str(venta.empleado.codigo)))
+                               venta.nombreProducto, str(codigoCliente), str(codigoEmpleado)))
         self.con.commit()
 
     def consultar_tabla_venta(self, inventario: Inventario):

@@ -20,6 +20,9 @@ class accesorio():
                     <td style="height: 18px; width: 263.172px;">Codigo Accesorio</td>
                     <td style="height: 18px; width: 263.172px;">Nombre Accesorio</td>
                     <td style="height: 18px; width: 348.625px;">Descripcion</td>
+                    <td style="height: 18px; width: 263.172px;">Cantidad</td>
+                    <td style="height: 18px; width: 348.625px;">Precio</td>
+                    
                     </tr>
                     </thead>
                     <tbody>
@@ -28,7 +31,9 @@ class accesorio():
             accesorio_template = f"""<tr style="height: 22px;">
                                 <td style="height: 22px; width: 263.172px;">{accesorio.codigoAccesorio}</td>
                                 <td style="height: 22px; width: 263.172px;">{accesorio.nombreAccesorio}</td>
-                                <td style="height: 22px; width: 348.625px;">{accesorio.descripcionAccesorio}</td>                                
+                                <td style="height: 22px; width: 348.625px;">{accesorio.descripcionAccesorio}</td> 
+                                 <td style="height: 22px; width: 348.625px;">{accesorio.cantidad}</td> 
+                                 <td style="height: 22px; width: 348.625px;">{accesorio.precio}</td>                               
                                 </tr>
                                 """
             template += accesorio_template

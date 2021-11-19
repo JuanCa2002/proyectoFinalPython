@@ -83,7 +83,7 @@ class Inventario:
             if len(list(self.buscar_accesorio(espec))) == 0:
                 self.accesorios.append(accesorio)
             else:
-                raise Exception('El alimento ya existe')
+                raise Exception('El accesorio ya existe')
 
     def buscar_accesorio(self, especificacion):
         for g in self.accesorios:

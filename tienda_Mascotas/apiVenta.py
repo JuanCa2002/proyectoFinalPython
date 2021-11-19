@@ -2,16 +2,16 @@ import falcon
 import waitress
 from falcon import API
 
-
+from tienda_Mascotas.Dominio.venta import Venta
 from tienda_Mascotas.Infraestructura.persistenciaVenta import PersistenciaVenta
-from tienda_Mascotas.tienda import Tienda
+from tienda_Mascotas.controlador.controladorInventario import ControladorInventario
 
 
 class venta():
 
     def on_get(self, req, resp):
-        tienda= Tienda()
-        inventario= tienda.generarInventario()
+        controlInven=ControladorInventario()
+        inventario= controlInven.generarInventario()
         db = PersistenciaVenta()
         ventas = db.consultar_tabla_venta(inventario)
         template = """<!-- #######  YAY, I AM THE SOURCE EDITOR! #########-->
@@ -32,7 +32,7 @@ class venta():
         for venta in ventas:
             venta_template = f"""<tr style="height: 22px;">
                                 <td style="height: 22px; width: 263.172px;">{venta.codigoVenta}</td>
-                                <td style="height: 22px; width: 263.172px;">{venta.cliente}</td>
+                                <td style="height: 22px; width: 263.172px;">{venta.codigoCliente}</td>
                                 <td style="height: 22px; width: 263.172px;">{venta.nombreProducto}</td>
                                 <td style="height: 22px; width: 348.625px;">{venta.precioTotal}</td>                                
                                 </tr>
@@ -43,6 +43,11 @@ class venta():
         resp.body = template
         resp.content_type = 'text/html'
         resp.status = falcon.HTTP_OK
+
+    def on_post(self, req, resp):
+        venta = Venta(**req.media)
+        venta.guardar(venta,venta.codigoCliente,venta.codigo)
+        resp.status = falcon.HTTP_CREATED
 
 
 

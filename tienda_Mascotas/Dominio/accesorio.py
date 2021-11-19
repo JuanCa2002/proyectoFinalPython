@@ -6,9 +6,9 @@ from tienda_Mascotas.Dominio.elementoCompra import ElementoCompra
 
 
 class Accesorio(ElementoCompra):
-    def __init__(self, codigoAccesorio, nombre, cantidadAccesorio, precioAccesorio, descripcionAccesorio,
-                 usoAccesorio):
-        super().__init__(cantidadAccesorio, precioAccesorio)
+    def __init__(self, codigoAccesorio, nombre, precio,cantidad,
+                 descripcionAccesorio,usoAccesorio):
+        super().__init__(cantidad, precio)
         self.codigoAccesorio = codigoAccesorio
         self.nombreAccesorio = nombre
         self.descripcionAccesorio = descripcionAccesorio

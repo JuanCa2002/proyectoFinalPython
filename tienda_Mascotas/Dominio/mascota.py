@@ -54,3 +54,9 @@ class Mascota(ElementoCompra):
         from tienda_Mascotas.Infraestructura.persistenciaMascota import PersistenciaMascota
         persisten_mascota = PersistenciaMascota()
         persisten_mascota.eliminar_mascota(codigoMascota)
+
+    def actualizarStock(self,cantidad):
+        self.cantidad=self.cantidad-cantidad
+
+
+
