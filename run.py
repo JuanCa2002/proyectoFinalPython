@@ -22,4 +22,5 @@ def iniciar() -> App:
 
 app = iniciar()
 if __name__ == '__main__':
+    app = iniciar()
     waitress.serve(app, port=2020, url_scheme='http')
