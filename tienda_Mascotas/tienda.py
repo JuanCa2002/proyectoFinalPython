@@ -166,7 +166,7 @@ if __name__ == '__main__':
                                     precioAlimento)
                 try:
                     inventario.agregar_alimento(alimento)
-                    url = "http://localhost:2020/alimento_guardar/"
+                    url = "https://acariciame-la-mascota.herokuapp.com/alimento_guardar/"
                     body = {
                         "codigoAlimento": codigoAlimento,
                         "tipoAlimento": tipo_alimento,
@@ -191,7 +191,7 @@ if __name__ == '__main__':
                                       descripcionAccesorio, usoAccesorio)
                 try:
                     inventario.agregar_accesorio(accesorio)
-                    url = "http://localhost:2020/accesorio_guardar/"
+                    url = "https://acariciame-la-mascota.herokuapp.com/accesorio_guardar/"
                     body = {
                         "codigoAccesorio": codigoAccesorio,
                         "nombre": nombreAccesorio,
@@ -226,7 +226,7 @@ if __name__ == '__main__':
                                     edadEmpleado, direccionEmpleado, correoEmpleado, horarioEmpleado)
                 try:
                     inventario.agregar_empleado(empleado)
-                    url = "http://localhost:2020/empleado_guardar/"
+                    url = "https://acariciame-la-mascota.herokuapp.com/empleado_guardar/"
                     body = {
                         "codigo": codigoEmpleado,
                         "nombre": nombreEmpleado,
@@ -267,7 +267,7 @@ if __name__ == '__main__':
                           , direccionCliente, correoCliente, edadCliente, tiempoCliente)
         try:
             inventario.agregar_cliente(cliente)
-            url = "http://localhost:2020/cliente_guardar/"
+            url = "https://acariciame-la-mascota.herokuapp.com/cliente_guardar/"
             body = {
                 "codigoCliente": codigoCliente,
                 "nombre": nombreCliente,
