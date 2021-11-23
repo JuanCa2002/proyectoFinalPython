@@ -2,7 +2,7 @@ import uuid
 
 import jsonpickle
 
-from tienda_Mascotas.Dominio.elementoCompra import ElementoCompra
+from tienda_Mascotas.Dominio.elemento_compra import ElementoCompra
 
 
 class Accesorio(ElementoCompra):
@@ -27,7 +27,7 @@ class Accesorio(ElementoCompra):
         return True
 
     def guardar(self, accesorio):
-        from tienda_Mascotas.Infraestructura.persistenciaAccesorio import PersistenciaAccesorio
+        from tienda_Mascotas.Infraestructura.persistencia_accesorio import PersistenciaAccesorio
         persitencia_accesorio = PersistenciaAccesorio()
         persitencia_accesorio.guardar_accesorio(accesorio)
 
@@ -35,7 +35,7 @@ class Accesorio(ElementoCompra):
         self._actualizar(self.codigoAccesorio)
 
     def _actualizar(self, codigoAccesorio):
-        from tienda_Mascotas.Infraestructura.persistenciaAccesorio import PersistenciaAccesorio
+        from tienda_Mascotas.Infraestructura.persistencia_accesorio import PersistenciaAccesorio
         persitencia_accesorio = PersistenciaAccesorio()
         persitencia_accesorio.actualizar_accesorio(self, codigoAccesorio)
 
@@ -48,6 +48,6 @@ class Accesorio(ElementoCompra):
         self.usoAccesorio = dict_params.get('usoAccesorio', self.usoAccesorio)
 
     def eliminar(self, codigoAccesorio):
-        from tienda_Mascotas.Infraestructura.persistenciaAccesorio import PersistenciaAccesorio
+        from tienda_Mascotas.Infraestructura.persistencia_accesorio import PersistenciaAccesorio
         persisten_accesorio = PersistenciaAccesorio()
         persisten_accesorio.eliminar_accesorio(codigoAccesorio)

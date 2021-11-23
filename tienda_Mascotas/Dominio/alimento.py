@@ -2,7 +2,7 @@ import uuid
 
 import jsonpickle
 
-from tienda_Mascotas.Dominio.elementoCompra import ElementoCompra
+from tienda_Mascotas.Dominio.elemento_compra import ElementoCompra
 
 
 class Alimento(ElementoCompra):
@@ -32,7 +32,7 @@ class Alimento(ElementoCompra):
         return True
 
     def guardar(self, alimento):
-        from tienda_Mascotas.Infraestructura.persistenciaAlimento import PersistenciaAlimento
+        from tienda_Mascotas.Infraestructura.persistencia_alimento import PersistenciaAlimento
         persitencia_alimento = PersistenciaAlimento()
         persitencia_alimento.guardar_alimento(alimento)
 
@@ -40,7 +40,7 @@ class Alimento(ElementoCompra):
         self._actualizar(self.codigoAlimento)
 
     def _actualizar(self, codigoAlimento):
-        from tienda_Mascotas.Infraestructura.persistenciaAlimento import PersistenciaAlimento
+        from tienda_Mascotas.Infraestructura.persistencia_alimento import PersistenciaAlimento
         persitencia_alimento = PersistenciaAlimento()
         persitencia_alimento.actualizar_alimento(self, codigoAlimento)
 
@@ -53,6 +53,6 @@ class Alimento(ElementoCompra):
         self.precio = dict_params.get('precio', self.precio)
 
     def eliminar(self, codigoAlimento):
-        from tienda_Mascotas.Infraestructura.persistenciaAlimento import PersistenciaAlimento
+        from tienda_Mascotas.Infraestructura.persistencia_alimento import PersistenciaAlimento
         persisten_alimento = PersistenciaAlimento()
         persisten_alimento.eliminar_alimento(codigoAlimento)

@@ -5,18 +5,15 @@ from tienda_Mascotas.Dominio.accesorio import Accesorio
 from tienda_Mascotas.Dominio.cliente import Cliente
 from tienda_Mascotas.Dominio.empleado import Empleado
 from tienda_Mascotas.Dominio.venta import Venta
-
-from tienda_Mascotas.Infraestructura.persistenciaAccesorio import PersistenciaAccesorio
-from tienda_Mascotas.Infraestructura.persistenciaAlimento import PersistenciaAlimento
-from tienda_Mascotas.Infraestructura.persistenciaCliente import PersistenciaCliente
-from tienda_Mascotas.Infraestructura.persistenciaEmpleado import PersistenciaEmpleado
-from tienda_Mascotas.Infraestructura.persistenciaMascota import PersistenciaMascota
+from tienda_Mascotas.Infraestructura.persistencia_accesorio import PersistenciaAccesorio
+from tienda_Mascotas.Infraestructura.persistencia_alimento import PersistenciaAlimento
+from tienda_Mascotas.Infraestructura.persistencia_cliente import PersistenciaCliente
+from tienda_Mascotas.Infraestructura.persistencia_empleado import PersistenciaEmpleado
+from tienda_Mascotas.Infraestructura.persistencia_mascota import PersistenciaMascota
 from tienda_Mascotas.Dominio.especificacion import Especificacion
 import requests
-from tienda_Mascotas.Infraestructura.configuracion import Configuracion
-import os
 
-from tienda_Mascotas.Infraestructura.persistenciaVenta import PersistenciaVenta
+from tienda_Mascotas.Infraestructura.persistencia_venta import PersistenciaVenta
 
 
 class Tienda():
@@ -130,17 +127,17 @@ if __name__ == '__main__':
         """)
             ans = input("Cual de las opciones quieres?: ")
             if ans == "1":
-                codigoMascota = str(input("Ingrse el codigo de la mascota:"))
-                tipo_mascota = str(input("Ingrese el de que tipo de animal que es la mascota:"))
-                raza = str(input("Ingrese la raza de la mascota:"))
-                nombre = str(input("Ingres el nombre provicional de la mascota:"))
-                edad = int(input("Ingrese la edad que tiene la mascota:"))
-                precioMascota = float(input("Ingrese el precio de la mascota:"))
-                cantidadMascota = int(input("Ingrese la cantidad de mascotas que hay con estas caracteristicas:"))
+                codigoMascota = str(input("Ingrese el código de la mascota :"))
+                tipo_mascota = str(input("Ingrese el de que tipo de animal que es la mascota: "))
+                raza = str(input("Ingrese la raza de la mascota: "))
+                nombre = str(input("Ingrese el nombre provisional de la mascota: "))
+                edad = int(input("Ingrese la edad que tiene la mascota: "))
+                precioMascota = float(input("Ingrese el precio de la mascota: "))
+                cantidadMascota = int(input("Ingrese la cantidad de mascotas que hay con estas características: "))
                 mascota = Mascota(codigoMascota, tipo_mascota, raza, nombre, edad, precioMascota, cantidadMascota)
                 try:
                     inventario.agregar_mascota(mascota)
-                    url = "http://localhost:2020/mascota_guardar/"
+                    url = "https://acariciame-la-mascota.herokuapp.com/mascota_guardar/"
                     body = {
                         "codigoMascota": codigoMascota,
                         "tipoMascota": tipo_mascota,
@@ -150,7 +147,7 @@ if __name__ == '__main__':
                         "cantidad": cantidadMascota,
                         "precio": precioMascota,
                     }
-                    print("\n Se agrego la mascota con exito en bd")
+                    print("\n Se agrego la mascota con éxito en la base de datos")
                     response = requests.request("POST", url, data=body)
                     print(response.status_code)
                 except Exception as ex:
@@ -158,17 +155,17 @@ if __name__ == '__main__':
 
 
             elif ans == "2":
-                codigoAlimento = str(input("Ingrse el codigo del alimento:"))
-                tipo_alimento = str(input("Ingrese el tipo de alimento que quiere registrar:"))
-                nombreAlimento = str(input("Ingrese el nombre del producto::"))
-                cantidadAlimento = int(input("Ingrese numero de existencias del articulo:"))
-                cantidadContenido = int(input("Ingrese la cantidad de contenido del producto(en gramos):"))
-                precioAlimento = float(input("Ingrese el precio del producto alimenticio:"))
+                codigoAlimento = str(input("Ingrese el código del alimento: "))
+                tipo_alimento = str(input("Ingrese el tipo de alimento que quiere registrar: "))
+                nombreAlimento = str(input("Ingrese el nombre del producto: "))
+                cantidadAlimento = int(input("Ingrese numero de existencias del articulo: "))
+                cantidadContenido = int(input("Ingrese la cantidad de contenido del producto en GRAMOS: "))
+                precioAlimento = float(input("Ingrese el precio del producto: "))
                 alimento = Alimento(codigoAlimento, tipo_alimento, nombreAlimento, cantidadAlimento, cantidadContenido,
                                     precioAlimento)
                 try:
                     inventario.agregar_alimento(alimento)
-                    url = "http://localhost:2020/alimento_guardar/"
+                    url = "https://acariciame-la-mascota.herokuapp.com/alimento_guardar/"
                     body = {
                         "codigoAlimento": codigoAlimento,
                         "tipoAlimento": tipo_alimento,
@@ -177,23 +174,23 @@ if __name__ == '__main__':
                         "cantidadContenido": cantidadContenido,
                         "precio": precioAlimento,
                     }
-                    print("\n Se agrego el alimento con exito en bd")
+                    print("\n Se agrego el alimento con éxito en la base de datos")
                     response = requests.request("POST", url, data=body)
                     print(response.status_code)
                 except Exception as ex:
                     print(ex)
             elif ans == "3":
-                codigoAccesorio = str(input("Ingrese el codigo del accesorio:"))
-                nombreAccesorio = str(input("Ingrese el nombre del accesorio:"))
-                descripcionAccesorio = str(input("Ingrese una descripcion corta del accesorio:"))
-                usoAccesorio = str(input("Ingrese el uso del accesorio:"))
-                precioAccesorio = float(input("Ingrese el precio del accesorio:"))
-                cantidadAccesorio = int(input("Ingrese la cantidad de existencias del accesorio:"))
-                accesorio = Accesorio(codigoAccesorio, nombreAccesorio,precioAccesorio,cantidadAccesorio,
-                                      descripcionAccesorio, usoAccesorio )
+                codigoAccesorio = str(input("Ingrese el código del accesorio: "))
+                nombreAccesorio = str(input("Ingrese el nombre del accesorio: "))
+                descripcionAccesorio = str(input("Ingrese una descripción corta del accesorio: "))
+                usoAccesorio = str(input("Ingrese el uso del accesorio: "))
+                precioAccesorio = float(input("Ingrese el precio del accesorio: "))
+                cantidadAccesorio = int(input("Ingrese la cantidad de existencias del accesorio: "))
+                accesorio = Accesorio(codigoAccesorio, nombreAccesorio, precioAccesorio, cantidadAccesorio,
+                                      descripcionAccesorio, usoAccesorio)
                 try:
                     inventario.agregar_accesorio(accesorio)
-                    url = "http://localhost:2020/accesorio_guardar/"
+                    url = "https://acariciame-la-mascota.herokuapp.com/accesorio_guardar/"
                     body = {
                         "codigoAccesorio": codigoAccesorio,
                         "nombre": nombreAccesorio,
@@ -204,61 +201,31 @@ if __name__ == '__main__':
                     }
                     response = requests.request("POST", url, data=body)
                     print(response.status_code)
-                    print("\n Se agrego el accesorio de mascotas con exito en bd")
+                    print("\n Se agrego el accesorio de mascotas con exito en la base de datos")
                 except Exception as ex:
                     print(ex)
 
             elif ans == "4":
                 registrar_cliente()
-                # codigoCliente = str(input("Ingrse el codigo del cliente:"))
-                # nombreCliente = str(input("Ingrese el nombre del cliente:"))
-                # cedulaCliente = str(input("Ingrese la cedula del cliente:"))
-                # apellidoCliente = str(input("Ingrese el apellido del cliente:"))
-                # generoCliente = str(input("Ingrese el genero del cliente:"))
-                # edadCliente = int(input("Ingrese la edad del cliente"))
-                # direccionCliente = str(input("Ingrese la direccion de residencia del cliente:"))
-                # correoCliente = str(input("Ingrese el correo de contacto del cliente:"))
-                # tiempoCliente = str(input("Ingrese el tiempo que lleva la persona siendo su cliente:"))
-                # cliente = Cliente(codigoCliente, nombreCliente, apellidoCliente, cedulaCliente, generoCliente
-                #                   , direccionCliente, correoCliente, edadCliente, tiempoCliente)
-                # try:
-                #     inventario.agregar_cliente(cliente)
-                #     url = "http://localhost:2020/cliente_guardar/"
-                #     body = {
-                #         "codigoCliente": codigoCliente,
-                #         "nombre": nombreCliente,
-                #         "apellido": apellidoCliente,
-                #         "cedula": cedulaCliente,
-                #         "genero": generoCliente,
-                #         "direccion": direccionCliente,
-                #         "correo": correoCliente,
-                #         "edad": edadCliente,
-                #         "tiempoCliente": tiempoCliente,
-                #     }
-                #     response = requests.request("POST", url, data=body)
-                #     print(response.status_code)
-                #     print("\n Se agrego el nuevo cliente con exito en bd")
-                # except Exception as ex:
-                #     print(ex)
 
             elif ans == "5":
-                codigoEmpleado = str(input("Ingrse el codigo del empleado:"))
-                nombreEmpleado = str(input("Ingrese el nombre del empleado:"))
-                cedulaEmpleado = str(input("Ingrese la cedula del empleado:"))
-                apellidoEmpleado = str(input("Ingrese el apellido del empleado:"))
-                generoEmpleado = str(input("Ingrese el genero del empleado:"))
-                edadEmpleado = int(input("Ingrese la edad del empleado:"))
-                direccionEmpleado = str(input("Ingrese la direccion de residencia del empleado:"))
-                correoEmpleado = str(input("Ingrese el correo de contacto del empledo:"))
-                cargoEmpleado = str(input("Ingrese el cargo que tiene el empleado en la tienda:"))
-                horarioEmpleado = str(input("Ingrese el horario que cumple el empleado:"))
-                salarioEmpleado = str(input("Ingrese el salario que tiene el empleado:"))
+                codigoEmpleado = str(input("Ingrese el código del empleado: "))
+                nombreEmpleado = str(input("Ingrese el nombre del empleado: "))
+                cedulaEmpleado = str(input("Ingrese la cédula del empleado: "))
+                apellidoEmpleado = str(input("Ingrese el apellido del empleado: "))
+                generoEmpleado = str(input("Ingrese el genero del empleado: "))
+                edadEmpleado = int(input("Ingrese la edad del empleado: "))
+                direccionEmpleado = str(input("Ingrese la dirección de residencia del empleado: "))
+                correoEmpleado = str(input("Ingrese el correo de contacto del empleado: "))
+                cargoEmpleado = str(input("Ingrese el cargo que tiene el empleado en la tienda: "))
+                horarioEmpleado = str(input("Ingrese el horario que cumple el empleado: "))
+                salarioEmpleado = str(input("Ingrese el salario que tiene el empleado: "))
                 empleado = Empleado(codigoEmpleado, nombreEmpleado, cedulaEmpleado, apellidoEmpleado, cargoEmpleado,
                                     salarioEmpleado, generoEmpleado,
                                     edadEmpleado, direccionEmpleado, correoEmpleado, horarioEmpleado)
                 try:
                     inventario.agregar_empleado(empleado)
-                    url = "http://localhost:2020/empleado_guardar/"
+                    url = "https://acariciame-la-mascota.herokuapp.com/empleado_guardar/"
                     body = {
                         "codigo": codigoEmpleado,
                         "nombre": nombreEmpleado,
@@ -274,32 +241,32 @@ if __name__ == '__main__':
                     }
                     response = requests.request("POST", url, data=body)
                     print(response.status_code)
-                    print("\n Se agrego el nuevo empleado con exito en bd")
+                    print("\n Se agrego el nuevo empleado con exito en la base de datos")
                 except Exception as ex:
                     print(ex)
 
             elif ans == "6":
                 ans = False
             elif ans != "":
-                print("\n Opcion no es valida, verifique el numero ingresado")
+                print("\n Opcion Incorrecta, verifique el numero ingresado")
 
 
     def registrar_cliente():
         inventario = generarInventario()
-        codigoCliente = str(input("Ingrse el codigo del cliente:"))
-        nombreCliente = str(input("Ingrese el nombre del cliente:"))
-        apellidoCliente = str(input("Ingrese el apellido del cliente:"))
-        cedulaCliente = str(input("Ingrese la cedula del cliente:"))
+        codigoCliente = str(input("Ingrese el código del cliente: "))
+        nombreCliente = str(input("Ingrese el nombre del cliente: "))
+        apellidoCliente = str(input("Ingrese el apellido del cliente: "))
+        cedulaCliente = str(input("Ingrese la cédula del cliente: "))
         generoCliente = str(input("Ingrese el genero del cliente: "))
         edadCliente = int(input("Ingrese la edad del cliente: "))
-        direccionCliente = str(input("Ingrese la direccion de residencia del cliente:"))
-        correoCliente = str(input("Ingrese el correo de contacto del cliente:"))
-        tiempoCliente = str(input("Ingrese el tiempo que lleva la persona siendo su cliente:"))
+        direccionCliente = str(input("Ingrese la dirección de residencia del cliente: "))
+        correoCliente = str(input("Ingrese el correo de contacto del cliente: "))
+        tiempoCliente = str(input("Ingrese el tiempo que lleva la persona siendo su cliente: "))
         cliente = Cliente(codigoCliente, nombreCliente, apellidoCliente, cedulaCliente, generoCliente
                           , direccionCliente, correoCliente, edadCliente, tiempoCliente)
         try:
             inventario.agregar_cliente(cliente)
-            url = "http://localhost:2020/cliente_guardar/"
+            url = "https://acariciame-la-mascota.herokuapp.com/cliente_guardar/"
             body = {
                 "codigoCliente": codigoCliente,
                 "nombre": nombreCliente,
@@ -313,7 +280,7 @@ if __name__ == '__main__':
             }
             response = requests.request("POST", url, data=body)
             print(response.status_code)
-            print("\n Se agrego el nuevo cliente con exito en bd")
+            print("\n Se agrego el nuevo cliente con exito en la base de datos")
         except Exception as ex:
             print(ex)
 """En el metodo buscar informacion el usuario se le da un menu de opciones para buscar la clase que quiera,y por 
@@ -330,16 +297,16 @@ def actualizarInformacion():
         BIENVENIDO A LA TIENDA DE MASCOTAS, ELIGE ENTRE NUESTRAS OPCIONES,
         PARA MANTENER LA TIENDA ORDENADA Y ACTUALIZAR SUS ELEMENTOS
         
-        1.actualizar mascota.
-        2.actualizar alimento de mascotas.
-        3.actualizar accesorio de mascotas.
-        4.actualizar cliente.
-        5.actualizar empleado.
+        1.Actualizar mascota.
+        2.Actualizar alimento de mascotas.
+        3.Actualizar accesorio de mascotas.
+        4.Actualizar cliente.
+        5.Actualizar empleado.
         6.Regresar al menu principal.
         """)
         ansAct = input("Cual de las opciones quieres?: ")
         if ansAct == "1":
-            codigoMascota = input("Ingrese el codigo de la mascota que quiere editar:")
+            codigoMascota = input("Ingrese el código de la mascota que quiere editar:")
             espc = Especificacion()
             espc.agregar_parametro("codigoMascota", codigoMascota)
             mascotas = list(inventario.buscar_mascota(espc))
@@ -352,12 +319,12 @@ def actualizarInformacion():
             atributos["nombre"] = mascotas[0].nombre
             atributos["cantidad"] = mascotas[0].cantidad
             atributos["precio"] = mascotas[0].precio
-            cantidadAtributos = int(input("Ingrese la cantidad de caracteristicas de la mascota que quiere editar:"))
+            cantidadAtributos = int(input("Ingrese la cantidad de características de la mascota que quiere editar: "))
             for i in range(0, cantidadAtributos):
-                caracteristica = input("Ingrese la caracteristica que quiere editar:")
-                valor = input("Ingrese el valor por el cual quiere reemplazarla:")
+                caracteristica = input("Ingrese la característica que quiere editar: ")
+                valor = input("Ingrese el valor por el cual quiere reemplazarla: ")
                 atributos[caracteristica] = valor
-            url = "http://localhost:2020/mascota_actualizar/" + codigoMascota
+            url = "https://acariciame-la-mascota.herokuapp.com/mascota_actualizar/" + codigoMascota
             body = {
 
                 "tipoMascota": atributos["tipoMascota"],
@@ -371,7 +338,7 @@ def actualizarInformacion():
             response = requests.request("PUT", url, data=body)
             print(response.status_code)
         elif ansAct == "2":
-            codigoAlimento = input("Ingrese el codigo del alimento que quiere editar:")
+            codigoAlimento = input("Ingrese el código del alimento que quiere editar: ")
             espc = Especificacion()
             espc.agregar_parametro("codigoAlimento", codigoAlimento)
             alimento = list(inventario.buscar_alimento(espc))
@@ -383,12 +350,12 @@ def actualizarInformacion():
             atributos["cantidadAlimento"] = alimento[0].cantidadAlimento
             atributos["cantidadContenido"] = alimento[0].cantidadContenido
             atributos["precio"] = alimento[0].precio
-            cantidadAtributos = int(input("Ingrese la cantidad de caracteristicas del alimento que quiere editar:"))
+            cantidadAtributos = int(input("Ingrese la cantidad de características del alimento que quiere editar: "))
             for i in range(0, cantidadAtributos):
-                caracteristica = input("Ingrese la caracteristica que quiere editar:")
-                valor = input("Ingrese el valor por el cual quiere reemplazarla:")
+                caracteristica = input("Ingrese la característica que quiere editar: ")
+                valor = input("Ingrese el valor por el cual quiere reemplazarla: ")
                 atributos[caracteristica] = valor
-            url = "http://localhost:2020/alimento_actualizar/" + codigoAlimento
+            url = "https://acariciame-la-mascota.herokuapp.com/alimento_actualizar/" + codigoAlimento
             body = {
                 "tipoAlimento": atributos["tipoAlimento"],
                 "nombreProducto": atributos["nombreProducto"],
@@ -399,7 +366,7 @@ def actualizarInformacion():
             response = requests.request("PUT", url, data=body)
             print(response.status_code)
         elif ansAct == "3":
-            codigoAccesorio = input("Ingrese el codigo del accesorio que quiere editar:")
+            codigoAccesorio = input("Ingrese el código del accesorio que quiere editar: ")
             espc = Especificacion()
             espc.agregar_parametro("codigoAccesorio", codigoAccesorio)
             accesorio = list(inventario.buscar_accesorio(espc))
@@ -411,12 +378,12 @@ def actualizarInformacion():
             atributos["cantidadAccesorio"] = accesorio[0].cantidad
             atributos["precioAccesorio"] = accesorio[0].precio
             atributos["usoAccesorio"] = accesorio[0].usoAccesorio
-            cantidadAtributos = int(input("Ingrese la cantidad de caracteristicas del accesorio que quiere editar:"))
+            cantidadAtributos = int(input("Ingrese la cantidad de características del accesorio que quiere editar: "))
             for i in range(0, cantidadAtributos):
-                caracteristica = input("Ingrese la caracteristica que quiere editar:")
-                valor = input("Ingrese el valor por el cual quiere reemplazarla:")
+                caracteristica = input("Ingrese la característica que quiere editar: ")
+                valor = input("Ingrese el valor por el cual quiere reemplazarla: ")
                 atributos[caracteristica] = valor
-            url = "http://localhost:2020/accesorio_actualizar/" + codigoAccesorio
+            url = "https://acariciame-la-mascota.herokuapp.com/accesorio_actualizar/" + codigoAccesorio
             body = {
                 "nombreAccesorio": atributos["nombreAccesorio"],
                 "precioAccesorio": atributos["precioAccesorio"],
@@ -427,7 +394,7 @@ def actualizarInformacion():
             response = requests.request("PUT", url, data=body)
             print(response.status_code)
         elif ansAct == "4":
-            codigoCliente = input("Ingrese el codigo del cliente que quiere editar:")
+            codigoCliente = input("Ingrese el código del cliente que quiere editar: ")
             espc = Especificacion()
             espc.agregar_parametro("codigoCliente", codigoCliente)
             cliente = list(inventario.buscar_cliente(espc))
@@ -442,12 +409,12 @@ def actualizarInformacion():
             atributos["correo"] = cliente[0].correo
             atributos["edad"] = cliente[0].edad
             atributos["tiempoCliente"] = cliente[0].tiempoCliente
-            cantidadAtributos = int(input("Ingrese la cantidad de caracteristicas del cliente que quiere editar:"))
+            cantidadAtributos = int(input("Ingrese la cantidad de características del cliente que quiere editar: "))
             for i in range(0, cantidadAtributos):
-                caracteristica = input("Ingrese la caracteristica que quiere editar:")
-                valor = input("Ingrese el valor por el cual quiere reemplazarla:")
+                caracteristica = input("Ingrese la característica que quiere editar: ")
+                valor = input("Ingrese el valor por el cual quiere reemplazarla: ")
                 atributos[caracteristica] = valor
-            url = "http://localhost:2020/cliente_actualizar/" + codigoCliente
+            url = "https://acariciame-la-mascota.herokuapp.com/cliente_actualizar/" + codigoCliente
             body = {
                 "nombre": atributos["nombre"],
                 "apellido": atributos["apellido"],
@@ -462,7 +429,7 @@ def actualizarInformacion():
             print(response.status_code)
 
         elif ansAct == "5":
-            codigoEmpleado = input("Ingrese el codigo del empleado que quiere editar:")
+            codigoEmpleado = input("Ingrese el código del empleado que quiere editar: ")
             espc = Especificacion()
             espc.agregar_parametro("codigo", codigoEmpleado)
             empleado = list(inventario.buscar_empleado(espc))
@@ -479,12 +446,12 @@ def actualizarInformacion():
             atributos["cargo"] = empleado[0].cargo
             atributos["salario"] = empleado[0].salario
             atributos["horario"] = empleado[0].horario
-            cantidadAtributos = int(input("Ingrese la cantidad de caracteristicas del cliente que quiere editar:"))
+            cantidadAtributos = int(input("Ingrese la cantidad de características del cliente que quiere editar: "))
             for i in range(0, cantidadAtributos):
-                caracteristica = input("Ingrese la caracteristica que quiere editar:")
-                valor = input("Ingrese el valor por el cual quiere reemplazarla:")
+                caracteristica = input("Ingrese la característica que quiere editar: ")
+                valor = input("Ingrese el valor por el cual quiere reemplazarla: ")
                 atributos[caracteristica] = valor
-            url = "http://localhost:2020/empleado_actualizar/" + codigoEmpleado
+            url = "https://acariciame-la-mascota.herokuapp.com/empleado_actualizar/" + codigoEmpleado
             body = {
                 "nombre": atributos["nombre"],
                 "apellido": atributos["apellido"],
@@ -511,14 +478,14 @@ def eliminarInformacion():
         BIENVENIDO A LA TIENDA DE MASCOTAS, ELIGE ENTRE NUESTRAS OPCIONES,
         PARA MANTENER LA TIENDA ORDENADA Y ELIMINAR SUS ELEMENTOS
         
-        1.eliminar una mascota.
-        2.eliminar alimento de mascotas.
-        3.eliminar accesorio de mascotas.
+        1.Eliminar una mascota.
+        2.Eliminar alimento de mascotas.
+        3.Eliminar accesorio de mascotas.
         4.Regresar al menu principal.
         """)
         ansDel = input("Cual de las opciones quieres?: ")
         if ansDel == "1":
-            codigoMascota = input("Ingrese el codigo de la mascota que quiere eliminar:")
+            codigoMascota = input("Ingrese el código de la mascota que quiere eliminar: ")
             espc = Especificacion()
             espc.agregar_parametro("codigoMascota", codigoMascota)
             mascota = list(inventario.buscar_mascota(espc))
@@ -527,9 +494,9 @@ def eliminarInformacion():
                 print("""Esta seguro de eliminar esta mascota?
                           1. Si
                           2. No""")
-                confirmacion = input("cual de las opciones quieres?:")
+                confirmacion = input("Cual de las opciones quieres?:")
                 if confirmacion == "1":
-                    url = "http://localhost:2020/mascota_eliminar/" + codigoMascota
+                    url = "https://acariciame-la-mascota.herokuapp.com/mascota_eliminar/" + codigoMascota
                     response = requests.request("DELETE", url)
                     print(response.status_code)
                 elif confirmacion == "2":
@@ -537,9 +504,9 @@ def eliminarInformacion():
                 else:
                     print("Ingrese una de las opciones correspondientes!")
             else:
-                print("No hay mascotas registradas con este codigo")
+                print("No hay mascotas registradas con este código")
         elif ansDel == "2":
-            codigoAlimento = input("Ingrese el codigo del alimento que quiere eliminar:")
+            codigoAlimento = input("Ingrese el código del alimento que quiere eliminar: ")
             espc = Especificacion()
             espc.agregar_parametro("codigoAlimento", codigoAlimento)
             alimento = list(inventario.buscar_alimento(espc))
@@ -550,7 +517,7 @@ def eliminarInformacion():
                           2. No""")
                 confirmacion = input("cual de las opciones quieres?:")
                 if confirmacion == "1":
-                    url = "http://localhost:2020/alimento_eliminar/" + codigoAlimento
+                    url = "https://acariciame-la-mascota.herokuapp.com/alimento_eliminar/" + codigoAlimento
                     response = requests.request("DELETE", url)
                     print(response.status_code)
                 elif confirmacion == "2":
@@ -558,9 +525,9 @@ def eliminarInformacion():
                 else:
                     print("Ingrese una de las opciones correspondientes!")
             else:
-                print("No hay alimentos registrados con este codigo")
+                print("No hay alimentos registrados con este código")
         elif ansDel == "3":
-            codigoAccesorio = input("Ingrese el codigo del accesorio que quiere eliminar:")
+            codigoAccesorio = input("Ingrese el código del accesorio que quiere eliminar: ")
             espc = Especificacion()
             espc.agregar_parametro("codigoAccesorio", codigoAccesorio)
             accesorio = list(inventario.buscar_accesorio(espc))
@@ -569,9 +536,9 @@ def eliminarInformacion():
                 print("""Esta seguro de eliminar este accesorio?
                           1. Si
                           2. No""")
-                confirmacion = input("cual de las opciones quieres?:")
+                confirmacion = input("Cual de las opciones quieres?")
                 if confirmacion == "1":
-                    url = "http://localhost:2020/accesorio_eliminar/" + codigoAccesorio
+                    url = "https://acariciame-la-mascota.herokuapp.com/accesorio_eliminar/" + codigoAccesorio
                     response = requests.request("DELETE", url)
                     print(response.status_code)
                 elif confirmacion == "2":
@@ -579,7 +546,7 @@ def eliminarInformacion():
                 else:
                     print("Ingrese una de las opciones correspondientes!")
             else:
-                print("No hay accesorios registrados con este codigo")
+                print("No hay accesorios registrados con este código")
         elif ansDel == "4":
             ansDel = False
 
@@ -590,7 +557,7 @@ def buscar_informacion():
     while opc:
         especificacion = Especificacion()
         print("""
-            BIENVENIDO A LA TIENDA DE MASCOTAS, ELEGI ENTRE NUESTRAS OPCIONES,
+            BIENVENIDO A LA TIENDA DE MASCOTAS, ELEGÍ ENTRE NUESTRAS OPCIONES,
             PARA BUSCAR TUS ELEMENTOS Y TENER UN CONTROL SOBRE ESTOS
             
             1.Buscar mascota.
@@ -600,27 +567,27 @@ def buscar_informacion():
             5.Buscar empleado.
             6.Regresar al menu principal.
             """)
-        opc = input("Ingrese la opcion que desee:")
+        opc = input("Ingrese la opción que desee: ")
         if opc == "1":
             print("""
-                ESTOS SON LAS CARACTERISTICAS POR LAS CUALES USTED PUEDE BUSCAR 
+                ESTOS SON LAS CARACTERÍSTICAS POR LAS CUALES USTED PUEDE BUSCAR 
                 A LA MASCOTA.
                 
                 1.Codigo mascota.
-                2.tipo de mascota.
-                3.raza de la mascota.
-                4.nombre de la mascota.
-                5.precio de la mascota.
-                6.edad mascota.
+                2.Tipo de mascota.
+                3.Raza de la mascota.
+                4.Nombre de la mascota.
+                5.Precio de la mascota.
+                6.Edad mascota.
                 7.Regresar.
                 """)
-            resultado = int(input("Ingrese el numero de caracteristicas por las que quiere buscar:"))
+            resultado = int(input("Ingrese el numero de características por las que quiere buscar: "))
             if resultado > 6:
                 print("No puede buscar por mas de 5 atributos para la mascota")
             else:
                 for i in range(resultado):
-                    llave = input("Ingrese el numero al que corresponde la caracteristica:")
-                    valor = input("Ingrese el valor de la caracteristica:")
+                    llave = input("Ingrese el numero al que corresponde la característica: ")
+                    valor = input("Ingrese el valor de la característica: ")
                     if llave == "1":
                         llave = "codigoMascota"
                     elif llave == "2":
@@ -634,7 +601,7 @@ def buscar_informacion():
                     elif llave == "6":
                         llave == "edad"
                     elif llave == "7":
-                        print("No hubo busqueda")
+                        print("No hubo búsqueda")
                     elif llave != "":
                         print("Ingreso opciones invalidas")
                     especificacion.agregar_parametro(llave, valor)
@@ -644,21 +611,21 @@ def buscar_informacion():
                 ESTOS SON LAS CARACTERISTICAS POR LAS CUALES USTED PUEDE BUSCAR 
                 EL ALIMENTO PARA MASCOTAS.
                 
-                1.Codigo alimento de mascotas.
-                2.tipo de alimento de mascotas.
-                3.cantidad existencias.
-                4.nombre del producto.
-                5.precio del producto.
-                6.cantidad de contenido alimento.
+                1.Código alimento de mascotas.
+                2.Tipo de alimento de mascotas.
+                3.Cantidad existencias.
+                4.Nombre del producto.
+                5.Precio del producto.
+                6.Cantidad de contenido alimento.
                 7.Regresar.
                 """)
-            resultado = int(input("Ingrese el numero de caracteristicas por las que quiere buscar:"))
+            resultado = int(input("Ingrese el numero de características por las que quiere buscar: "))
             if resultado > 6:
                 print("No puede buscar por mas de 5 atributos para el alimento")
             else:
                 for i in range(resultado):
-                    llave = input("Ingrese el numero al que corresponde la caracteristica:")
-                    valor = input("Ingrese el valor de la caracteristica:")
+                    llave = input("Ingrese el numero al que corresponde la característica:")
+                    valor = input("Ingrese el valor de la característica:")
                     if llave == "1":
                         llave = "codigoAlimento"
                     elif llave == "2":
@@ -672,7 +639,7 @@ def buscar_informacion():
                     elif llave == "6":
                         llave == "cantidadContenido"
                     elif llave == "7":
-                        print("No hubo busqueda")
+                        print("No hubo búsqueda")
                     elif llave != "":
                         print("Ingreso opciones invalidas")
                     especificacion.agregar_parametro(llave, valor)
@@ -682,21 +649,21 @@ def buscar_informacion():
                 ESTOS SON LAS CARACTERISTICAS POR LAS CUALES USTED PUEDE BUSCAR 
                 EL ACCESORIO DE MASCOTAS.
                 
-                1.Codigo accesorio.
+                1.Código accesorio.
                 2.Nombre del accesorio.
                 3.Cantidad existencias del accesorio.
                 4.Precio del accesorio.
-                5.Descripcion del accesorio.
+                5.Descripción del accesorio.
                 6.Uso del accesorio.
                 7.Regresar.
                 """)
-            resultado = int(input("Ingrese el numero de caracteristicas por las que quiere buscar:"))
+            resultado = int(input("Ingrese el numero de características por las que quiere buscar: "))
             if resultado > 6:
                 print("No puede buscar por mas de 5 atributos para el accesorio")
             else:
                 for i in range(resultado):
-                    llave = input("Ingrese el numero al que corresponde la caracteristica:")
-                    valor = input("Ingrese el valor de la caracteristica:")
+                    llave = input("Ingrese el numero al que corresponde la característica:")
+                    valor = input("Ingrese el valor de la característica:")
                     if llave == "1":
                         llave = "codigoAccesorio"
                     elif llave == "2":
@@ -710,14 +677,14 @@ def buscar_informacion():
                     elif llave == "6":
                         llave == "usoAccesorio"
                     elif llave == "7":
-                        print("No hubo busqueda")
+                        print("No hubo búsqueda")
                     elif llave != "":
                         print("Ingreso opciones invalidas")
                     especificacion.agregar_parametro(llave, valor)
                 print(list(inventario.buscar_accesorio(especificacion)))
         elif opc == "4":
             print("""
-                ESTOS SON LAS CARACTERISTICAS POR LAS CUALES USTED PUEDE BUSCAR 
+                ESTOS SON LAS CARACTERÍSTICAS POR LAS CUALES USTED PUEDE BUSCAR 
                 A EL CLIENTE.
                 
                 1.Codigo del cliente.
@@ -731,13 +698,13 @@ def buscar_informacion():
                 9.Tiempo como cliente de la tienda.
                 10.Regresar.
                 """)
-            resultado = int(input("Ingrese el numero de caracteristicas por las que quiere buscar:"))
+            resultado = int(input("Ingrese el numero de características por las que quiere buscar:"))
             if resultado > 8:
                 print("No puede buscar por mas de 8 atributos para el cliente")
             else:
                 for i in range(resultado):
-                    llave = input("Ingrese el numero al que corresponde la caracteristica:")
-                    valor = input("Ingrese el valor de la caracteristica:")
+                    llave = input("Ingrese el numero al que corresponde la característica:")
+                    valor = input("Ingrese el valor de la característica:")
                     if llave == "1":
                         llave = "codigoCliente"
                     elif llave == "2":
@@ -757,7 +724,7 @@ def buscar_informacion():
                     elif llave == "9":
                         llave = "tiempoCliente"
                     elif llave == "10":
-                        print("No hubo busqueda")
+                        print("No hubo búsqueda")
                     elif llave != "":
                         print("Ingreso opciones invalidas")
                     especificacion.agregar_parametro(llave, valor)
@@ -780,13 +747,13 @@ def buscar_informacion():
                 11.Salario del empleado.
                 12.Regresar.
                 """)
-            resultado = int(input("Ingrese el numero de caracteristicas por las que quiere buscar:"))
+            resultado = int(input("Ingrese el numero de características por las que quiere buscar:"))
             if resultado > 8:
                 print("No puede buscar por mas de 8 atributos para el cliente")
             else:
                 for i in range(resultado):
-                    llave = input("Ingrese el numero al que corresponde la caracteristica:")
-                    valor = input("Ingrese el valor de la caracteristica:")
+                    llave = input("Ingrese el numero al que corresponde la característica:")
+                    valor = input("Ingrese el valor de la característica:")
                     if llave == "1":
                         llave = "codigo"
                     elif llave == "2":
@@ -810,15 +777,15 @@ def buscar_informacion():
                     elif llave == "11":
                         llave = "salario"
                     elif llave == "12":
-                        print("No hubo busqueda")
+                        print("No hubo búsqueda")
                     elif llave != "":
-                        print("Ingreso opciones invalidas")
+                        print("Ingreso opciones inválidas")
                     especificacion.agregar_parametro(llave, valor)
                 print(list(inventario.buscar_empleado(especificacion)))
         elif opc == "6":
             opc = False
         elif opc != "":
-            print("\n Opcion invalida porfavor rectifica")
+            print("\n Opción invalida")
 
 
 def generarVenta():
@@ -843,7 +810,7 @@ def generarVenta():
         elif respVenta == "4":
             respVenta = False
         else:
-            print("Ingrese una de las opciones maldito fracasado!")
+            print("Ingrese una de las opciones válidas")
 
 
 def venderMascota(inventario):
@@ -856,9 +823,9 @@ def venderMascota(inventario):
               + "Cantidad disponible: " + str(mascota.cantidad) + "\n"
               + "Precio: " + str(mascota.precio) + "\n")
         # Actualizar la base de datos
-    codigoMascota = input("Ingrese el codigo de la mascota que se quiere comprar: ")
-    codigoCliente = input("Ingrese el codigo del cliente que realiza la compra: ")
-    codigoEmpleado = input("Ingrese el codigo del empleado que realiza la venta: ")
+    codigoMascota = input("Ingrese el código de la mascota que se quiere comprar: ")
+    codigoCliente = input("Ingrese el código del cliente que realiza la compra: ")
+    codigoEmpleado = input("Ingrese el código del empleado que realiza la venta: ")
     cantidad = int(input("Ingrese la cantidad de mascotas que desea comprar: "))
     espc = Especificacion()
     espc.agregar_parametro("codigoMascota", codigoMascota)
@@ -872,7 +839,7 @@ def venderMascota(inventario):
             "La cantidad ingresada supera nuestro stock.\nPor favor ingresa la nueva cantidad de mascotas que desea comprar: "))
     empleados = list(inventario.buscar_empleado(espcEmpleado))
     while len(empleados) == 0:
-        codigoEmpleado = input("Codigo de empleado no valido\nIngrese el codigo del empleado que realiza la venta: ")
+        codigoEmpleado = input("Código de empleado no valido\nIngrese el código del empleado que realiza la venta: ")
         espcEmpleado.agregar_parametro("codigo", codigoEmpleado)
         empleados = list(inventario.buscar_empleado(espcEmpleado))
 
@@ -882,22 +849,22 @@ def venderMascota(inventario):
         resp = int(input("1. Si\n2. No"))
         if resp == 1:
             registrar_cliente()
-            codigoCliente = input("Ingrese el codigo del cliente que realiza la compra: ")
+            codigoCliente = input("Ingrese el código del cliente que realiza la compra: ")
             espcCliente.agregar_parametro("codigoCliente", codigoCliente)
             clientes = list(inventario.buscar_cliente(espcCliente))
         elif resp == 2:
-            codigoCliente = input("Ingrese el codigo del cliente que realiza la compra: ")
+            codigoCliente = input("Ingrese el código del cliente que realiza la compra: ")
             espcCliente.agregar_parametro("codigoCliente", codigoCliente)
             clientes = list(inventario.buscar_cliente(espcCliente))
         else:
-            print("Ingrese una opcion valida estupido")
+            print("Ingrese una opción válida")
     precioTotal = cantidad * mascotas[0].precio
     venta = Venta(clientes[0], empleados[0], mascotas[0].nombre, cantidad, mascotas[0].precio, precioTotal)
     mascotas[0].cantidad = mascotas[0].cantidad - cantidad
     saverMascota.actualizar_mascota(mascotas[0], mascotas[0].codigoMascota)
     try:
         inventario.agregar_venta(venta)
-        url = "http://localhost:2020/venta_guardar/"
+        url = "https://acariciame-la-mascota.herokuapp.com/venta_guardar/"
         body = {
             "cantidadVenta": cantidad,
             "precioUnidad": mascotas[0].precio,
@@ -908,7 +875,7 @@ def venderMascota(inventario):
         }
         response = requests.request("POST", url, data=body)
         print(response.status_code)
-        print("\n Se agrego la venta con exito en bd")
+        print("\n Se agrego la venta con exito en la base de datos")
     except Exception as ex:
         print(ex)
 
@@ -920,11 +887,11 @@ def venderAccesorio(inventario):
               + "Descripcion: " + accesorio.descripcionAccesorio + "\n"
               + "Uso: " + accesorio.usoAccesorio + "\n"
               + "Cantidad diponible: " + str(accesorio.cantidad) + "\n"
-              + "Precio: " + str(accesorio.precio)+"\n")
+              + "Precio: " + str(accesorio.precio) + "\n")
         # Actualizar la base de datos
-    codigoAccesorio = input("Ingrese el codigo del accesorio que se quiere comprar: ")
-    codigoCliente = input("Ingrese el codigo del cliente que realiza la compra: ")
-    codigoEmpleado = input("Ingrese el codigo del empleado que realiza la venta: ")
+    codigoAccesorio = input("Ingrese el código del accesorio que se quiere comprar: ")
+    codigoCliente = input("Ingrese el código del cliente que realiza la compra: ")
+    codigoEmpleado = input("Ingrese el código del empleado que realiza la venta: ")
     cantidad = int(input("Ingrese la cantidad de accesorios que desea comprar: "))
     espc = Especificacion()
     espc.agregar_parametro("codigoAccesorio", codigoAccesorio)
@@ -938,7 +905,7 @@ def venderAccesorio(inventario):
             "La cantidad ingresada supera nuestro stock.\nPor favor ingresa la nueva cantidad de mascotas que desea comprar: "))
     empleados = list(inventario.buscar_empleado(espcEmpleado))
     while len(empleados) == 0:
-        codigoEmpleado = input("Codigo de empleado no valido\nIngrese el codigo del empleado que realiza la venta: ")
+        codigoEmpleado = input("Código de empleado no valido\nIngrese el código del empleado que realiza la venta: ")
         espcEmpleado.agregar_parametro("codigo", codigoEmpleado)
         empleados = list(inventario.buscar_empleado(espcEmpleado))
 
@@ -948,22 +915,22 @@ def venderAccesorio(inventario):
         resp = int(input("1. Si\n2. No"))
         if resp == 1:
             registrar_cliente()
-            codigoCliente = input("Ingrese el codigo del cliente que realiza la compra: ")
+            codigoCliente = input("Ingrese el código del cliente que realiza la compra: ")
             espcCliente.agregar_parametro("codigoCliente", codigoCliente)
             clientes = list(inventario.buscar_cliente(espcCliente))
         elif resp == 2:
-            codigoCliente = input("Ingrese el codigo del cliente que realiza la compra: ")
+            codigoCliente = input("Ingrese el código del cliente que realiza la compra: ")
             espcCliente.agregar_parametro("codigoCliente", codigoCliente)
             clientes = list(inventario.buscar_cliente(espcCliente))
         else:
-            print("Ingrese una opcion valida estupido")
+            print("Ingrese una opción valida")
     precioTotal = cantidad * accesorios[0].precio
     venta = Venta(clientes[0], empleados[0], accesorios[0].nombreAccesorio, cantidad, accesorios[0].precio, precioTotal)
     accesorios[0].cantidad = accesorios[0].cantidad - cantidad
     saverAccesorios.actualizar_accesorio(accesorios[0], accesorios[0].codigoAccesorio)
     try:
         inventario.agregar_venta(venta)
-        url = "http://localhost:2020/venta_guardar/"
+        url = "https://acariciame-la-mascota.herokuapp.com/venta_guardar/"
         body = {
             "cantidadVenta": cantidad,
             "precioUnidad": accesorios[0].precio,
@@ -974,7 +941,7 @@ def venderAccesorio(inventario):
         }
         response = requests.request("POST", url, data=body)
         print(response.status_code)
-        print("\n Se agrego la venta con exito en bd")
+        print("\n Se agrego la venta con exito en la base de datos")
     except Exception as ex:
         print(ex)
 
@@ -986,11 +953,11 @@ def venderAlimento(inventario):
               + "Tipo de alimento: " + alimento.tipoAlimento + "\n"
               + "Contenido: " + str(alimento.cantidadContenido) + "\n"
               + "Cantidad diponible: " + str(alimento.cantidad) + "\n"
-              + "Precio: " + str(alimento.precio)+"\n")
+              + "Precio: " + str(alimento.precio) + "\n")
         # Actualizar la base de datos
-    codigoAlimento = input("Ingrese el codigo del alimento que se quiere comprar: ")
-    codigoCliente = input("Ingrese el codigo del cliente que realiza la compra: ")
-    codigoEmpleado = input("Ingrese el codigo del empleado que realiza la venta: ")
+    codigoAlimento = input("Ingrese el código del alimento que se quiere comprar: ")
+    codigoCliente = input("Ingrese el código del cliente que realiza la compra: ")
+    codigoEmpleado = input("Ingrese el código del empleado que realiza la venta: ")
     cantidad = int(input("Ingrese la cantidad de alimentos que desea comprar: "))
     espc = Especificacion()
     espc.agregar_parametro("codigoAlimento", codigoAlimento)
@@ -1004,7 +971,7 @@ def venderAlimento(inventario):
             "La cantidad ingresada supera nuestro stock.\nPor favor ingresa la nueva cantidad de mascotas que desea comprar: "))
     empleados = list(inventario.buscar_empleado(espcEmpleado))
     while len(empleados) == 0:
-        codigoEmpleado = input("Codigo de empleado no valido\nIngrese el codigo del empleado que realiza la venta: ")
+        codigoEmpleado = input("Código de empleado no valido\nIngrese el código del empleado que realiza la venta: ")
         espcEmpleado.agregar_parametro("codigo", codigoEmpleado)
         empleados = list(inventario.buscar_empleado(espcEmpleado))
 
@@ -1014,22 +981,22 @@ def venderAlimento(inventario):
         resp = int(input("1. Si\n2. No"))
         if resp == 1:
             registrar_cliente()
-            codigoCliente = input("Ingrese el codigo del cliente que realiza la compra: ")
+            codigoCliente = input("Ingrese el código del cliente que realiza la compra: ")
             espcCliente.agregar_parametro("codigoCliente", codigoCliente)
             clientes = list(inventario.buscar_cliente(espcCliente))
         elif resp == 2:
-            codigoCliente = input("Ingrese el codigo del cliente que realiza la compra: ")
+            codigoCliente = input("Ingrese el código del cliente que realiza la compra: ")
             espcCliente.agregar_parametro("codigoCliente", codigoCliente)
             clientes = list(inventario.buscar_cliente(espcCliente))
         else:
-            print("Ingrese una opcion valida estupido")
+            print("Ingrese una opción válida")
     precioTotal = cantidad * alimentos[0].precio
     venta = Venta(clientes[0], empleados[0], alimentos[0].nombreProducto, cantidad, alimentos[0].precio, precioTotal)
     alimentos[0].cantidad = alimentos[0].cantidad - cantidad
     saverAlimentos.actualizar_alimento(alimentos[0], alimentos[0].codigoAlimento)
     try:
         inventario.agregar_venta(venta)
-        url = "http://localhost:2020/venta_guardar/"
+        url = "https://acariciame-la-mascota.herokuapp.com/mascota_guardar/"
         body = {
             "cantidadVenta": cantidad,
             "precioUnidad": alimentos[0].precio,
@@ -1040,7 +1007,7 @@ def venderAlimento(inventario):
         }
         response = requests.request("POST", url, data=body)
         print(response.status_code)
-        print("\n Se agrego la venta con exito en bd")
+        print("\n Se agrego la venta con éxito en la base de datos")
     except Exception as ex:
         print(ex)
 
@@ -1073,5 +1040,5 @@ while ansPrin:
     elif ansPrin == "5":
         generarVenta()
     elif ansPrin != "":
-        print("\n Nos vemos hasta la proxima!")
+        print("\n Nos vemos hasta la próxima!")
         ansPrin = False

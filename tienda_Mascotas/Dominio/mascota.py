@@ -1,5 +1,5 @@
 import uuid
-from tienda_Mascotas.Dominio.elementoCompra import ElementoCompra
+from tienda_Mascotas.Dominio.elemento_compra import ElementoCompra
 
 
 class Mascota(ElementoCompra):
@@ -29,7 +29,7 @@ class Mascota(ElementoCompra):
         return True
 
     def guardar(self, mascota):
-        from tienda_Mascotas.Infraestructura.persistenciaMascota import PersistenciaMascota
+        from tienda_Mascotas.Infraestructura.persistencia_mascota import PersistenciaMascota
         persitencia_mascota = PersistenciaMascota()
         persitencia_mascota.guardar_mascota(mascota)
 
@@ -37,7 +37,7 @@ class Mascota(ElementoCompra):
         self._actualizar(self.codigoMascota)
 
     def _actualizar(self, codigoMascota):
-        from tienda_Mascotas.Infraestructura.persistenciaMascota import PersistenciaMascota
+        from tienda_Mascotas.Infraestructura.persistencia_mascota import PersistenciaMascota
         persitencia_mascota = PersistenciaMascota()
         persitencia_mascota.actualizar_mascota(self, codigoMascota)
 
@@ -51,7 +51,7 @@ class Mascota(ElementoCompra):
         self.cantidad = dict_params.get('cantidad', self.cantidad)
 
     def eliminar(self, codigoMascota):
-        from tienda_Mascotas.Infraestructura.persistenciaMascota import PersistenciaMascota
+        from tienda_Mascotas.Infraestructura.persistencia_mascota import PersistenciaMascota
         persisten_mascota = PersistenciaMascota()
         persisten_mascota.eliminar_mascota(codigoMascota)
 
