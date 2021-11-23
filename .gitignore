@@ -1,0 +1,5 @@
+venv3.8/
+*.pyc
+.idea/
+__pycache__
+tienda_Mascotas/controlador/__pycache__

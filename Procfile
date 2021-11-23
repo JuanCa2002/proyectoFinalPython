@@ -1,0 +1,1 @@
+web: gunicorn run:app -b 0.0.0.0:2020 --workers 1 -t 240
