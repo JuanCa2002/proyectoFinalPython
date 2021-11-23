@@ -1,7 +1,6 @@
 import sqlite3
 
 from tienda_Mascotas.Dominio.mascota import Mascota
-from tienda_Mascotas.Infraestructura.configuracion import Configuracion
 
 
 class PersistenciaMascota:
