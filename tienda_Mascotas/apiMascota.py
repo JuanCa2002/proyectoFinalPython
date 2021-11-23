@@ -64,7 +64,7 @@ class mascota():
 
 def iniciar(api) -> App:
     # run:app -b 0.0.0.0:2020 --workers 1 -t 240
-    api.add_route("https://acariciame-la-mascota.herokuapp.com/mascota/", mascota())
+    api.add_route("/mascota/", mascota())
     api.add_route("/mascota_guardar/", mascota())
     api.add_route("/mascota_actualizar/{codigoMascota}", mascota())
     api.add_route("/mascota_eliminar/{codigoMascota}", mascota())
