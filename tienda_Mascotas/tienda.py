@@ -138,7 +138,7 @@ if __name__ == '__main__':
                 mascota = Mascota(codigoMascota, tipo_mascota, raza, nombre, edad, precioMascota, cantidadMascota)
                 try:
                     inventario.agregar_mascota(mascota)
-                    url = "http://acariciame-la-mascota.herokuapp.com/mascota_guardar/"
+                    url = "http://localhost:2020/mascota_guardar/"
                     body = {
                         "codigoMascota": codigoMascota,
                         "tipoMascota": tipo_mascota,
