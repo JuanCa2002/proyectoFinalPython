@@ -1,21 +1,28 @@
 import falcon
-import waitress
 from falcon import App
 
 from tienda_Mascotas.Dominio.empleado import Empleado
-from tienda_Mascotas.Infraestructura.persistenciaEmpleado import PersistenciaEmpleado
+from tienda_Mascotas.Infraestructura.persistencia_empleado import PersistenciaEmpleado
 
 
-class empleado():
+class Api_empleado():
 
     def on_get(self, req, resp):
         db = PersistenciaEmpleado()
         empleados = db.consultar_tabla_empleado()
         template = """<!-- #######  YAY, I AM THE SOURCE EDITOR! #########-->
+                    <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+                    <script src="js/bootstrap.js"></script>
+                    <script>
+                    </head>
                     <h1 style="color: #5e9ca0;">La tienda del CAMI</h1>
                     <h2 style="color: #2e6c80;">Empleados:</h2>
                     <h2 style="color: #2e6c80;">Cleaning options:</h2>
-                    <table class="editorDemoTable" style="height: 362px;">
+                    <table class="table-info" style="height: 362px;">
                     <thead>
                     <tr style="height: 18px;">
                     <td style="height: 18px; width: 263.172px;">Codigo Empleado</td>
@@ -62,9 +69,9 @@ class empleado():
 
 def iniciar(api) -> App:
     # run:app -b 0.0.0.0:2020 --workers 1 -t 240
-    api.add_route("/empleado/", empleado())
-    api.add_route("/empleado_guardar/", empleado())
-    api.add_route("/empleado_actualizar/{codigoEmpleado}", empleado())
-    api.add_route("/empleado_eliminar/{codigoEmpleado}", empleado())
+    api.add_route("/empleado/", Api_empleado())
+    api.add_route("/empleado_guardar/", Api_empleado())
+    api.add_route("/empleado_actualizar/{codigoEmpleado}", Api_empleado())
+    api.add_route("/empleado_eliminar/{codigoEmpleado}", Api_empleado())
     return api
 

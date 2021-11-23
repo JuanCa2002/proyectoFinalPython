@@ -1,12 +1,12 @@
 import falcon
-import waitress
+
 from falcon import App
 
 from tienda_Mascotas.Dominio.alimento import Alimento
-from tienda_Mascotas.Infraestructura.persistenciaAlimento import PersistenciaAlimento
+from tienda_Mascotas.Infraestructura.persistencia_alimento import PersistenciaAlimento
 
 
-class alimento():
+class Api_alimento():
 
     def on_get(self, req, resp):
         db = PersistenciaAlimento()
@@ -62,10 +62,10 @@ class alimento():
 
 def iniciar(api) -> App:
     # run:app -b 0.0.0.0:2020 --workers 1 -t 240
-    api.add_route("/alimento/", alimento())
-    api.add_route("/alimento_guardar/", alimento())
-    api.add_route("/alimento_actualizar/{codigoAlimento}", alimento())
-    api.add_route("/alimento_eliminar/{codigoAlimento}", alimento())
+    api.add_route("/alimento/", Api_alimento())
+    api.add_route("/alimento_guardar/", Api_alimento())
+    api.add_route("/alimento_actualizar/{codigoAlimento}", Api_alimento())
+    api.add_route("/alimento_eliminar/{codigoAlimento}", Api_alimento())
     return api
 
 

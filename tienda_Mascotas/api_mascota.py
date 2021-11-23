@@ -1,12 +1,11 @@
-import json
+
 import falcon
-import waitress as waitress
 from falcon import App
 from tienda_Mascotas.Dominio.mascota import Mascota
-from tienda_Mascotas.Infraestructura.persistenciaMascota import PersistenciaMascota
+from tienda_Mascotas.Infraestructura.persistencia_mascota import PersistenciaMascota
 
 
-class mascota():
+class Api_mascota():
 
     def on_get(self, req, resp):
         db = PersistenciaMascota()
@@ -64,9 +63,9 @@ class mascota():
 
 def iniciar(api) -> App:
     # run:app -b 0.0.0.0:2020 --workers 1 -t 240
-    api.add_route("/mascota/", mascota())
-    api.add_route("/mascota_guardar/", mascota())
-    api.add_route("/mascota_actualizar/{codigoMascota}", mascota())
-    api.add_route("/mascota_eliminar/{codigoMascota}", mascota())
+    api.add_route("/mascota/", Api_mascota())
+    api.add_route("/mascota_guardar/", Api_mascota())
+    api.add_route("/mascota_actualizar/{codigoMascota}", Api_mascota())
+    api.add_route("/mascota_eliminar/{codigoMascota}", Api_mascota())
     return api
 

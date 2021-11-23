@@ -1,12 +1,11 @@
 import falcon
-import waitress
 from falcon import App
 
 from tienda_Mascotas.Dominio.cliente import Cliente
-from tienda_Mascotas.Infraestructura.persistenciaCliente import PersistenciaCliente
+from tienda_Mascotas.Infraestructura.persistencia_cliente import PersistenciaCliente
 
 
-class cliente():
+class Api_cliente():
 
     def on_get(self, req, resp):
         db = PersistenciaCliente()
@@ -62,10 +61,10 @@ class cliente():
 
 def iniciar(api) -> App:
     # run:app -b 0.0.0.0:2020 --workers 1 -t 240
-    api.add_route("/cliente/", cliente())
-    api.add_route("/cliente_guardar/", cliente())
-    api.add_route("/cliente_actualizar/{codigoCliente}", cliente())
-    api.add_route("/cliente_eliminar/{codigoCliente}/", cliente())
+    api.add_route("/cliente/", Api_cliente())
+    api.add_route("/cliente_guardar/", Api_cliente())
+    api.add_route("/cliente_actualizar/{codigoCliente}", Api_cliente())
+    api.add_route("/cliente_eliminar/{codigoCliente}/", Api_cliente())
     return api
 
 

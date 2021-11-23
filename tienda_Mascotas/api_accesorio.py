@@ -2,10 +2,10 @@ import falcon
 from falcon import App
 
 from tienda_Mascotas.Dominio.accesorio import Accesorio
-from tienda_Mascotas.Infraestructura.persistenciaAccesorio import PersistenciaAccesorio
+from tienda_Mascotas.Infraestructura.persistencia_accesorio import PersistenciaAccesorio
 
 
-class accesorio():
+class Api_accesorio():
     def on_get(self, req, resp):
         db = PersistenciaAccesorio()
         accesorios = db.consultar_tabla_accesorio()
@@ -65,10 +65,10 @@ class accesorio():
 
 def iniciar(api) -> App:
 
-    api.add_route("/accesorio/", accesorio())
-    api.add_route("/accesorio_guardar/", accesorio())
-    api.add_route("/accesorio_actualizar/{codigoAccesorio}",accesorio())
-    api.add_route("/accesorio_eliminar/{codigoAccesorio}", accesorio())
+    api.add_route("/accesorio/", Api_accesorio())
+    api.add_route("/accesorio_guardar/", Api_accesorio())
+    api.add_route("/accesorio_actualizar/{codigoAccesorio}", Api_accesorio())
+    api.add_route("/accesorio_eliminar/{codigoAccesorio}", Api_accesorio())
     return api
 
 

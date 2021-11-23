@@ -1,13 +1,12 @@
 import falcon
-import waitress
 from falcon import App
 
 from tienda_Mascotas.Dominio.venta import Venta
-from tienda_Mascotas.Infraestructura.persistenciaVenta import PersistenciaVenta
-from tienda_Mascotas.controlador.controladorInventario import ControladorInventario
+from tienda_Mascotas.Infraestructura.persistencia_venta import PersistenciaVenta
+from tienda_Mascotas.controlador.controlador_inventario import ControladorInventario
 
 
-class venta():
+class Api_venta():
 
     def on_get(self, req, resp):
         controlInven=ControladorInventario()
@@ -54,8 +53,8 @@ class venta():
 
 def iniciar(api) -> App:
     # run:app -b 0.0.0.0:2020 --workers 1 -t 240
-    api.add_route("/venta/", venta())
-    api.add_route("/venta_guardar/", venta())
+    api.add_route("/venta/", Api_venta())
+    api.add_route("/venta_guardar/", Api_venta())
 
     return api
 

@@ -71,18 +71,3 @@ class PersistenciaEmpleado:
         cursor = self.con.cursor()
         cursor.execute(query, (codigoEmpleado,))
         self.con.commit()
-
-    @classmethod
-    def save_json_empleado(cls, empleado):
-        text_open = open("files/" + str(empleado.codigo) + '.jsonEmpleado', mode='w')
-        json_gui = jsonpickle.encode(empleado)
-        text_open.write(json_gui)
-        text_open.close()
-
-    @classmethod
-    def load_json_empleado(cls, file_name):
-        text_open = open("files/" + file_name, mode='r')
-        json_gui = text_open.readline()
-        empleado = jsonpickle.decode(json_gui)
-        text_open.close()
-        return empleado
