@@ -137,7 +137,7 @@ if __name__ == '__main__':
                 mascota = Mascota(codigoMascota, tipo_mascota, raza, nombre, edad, precioMascota, cantidadMascota)
                 try:
                     inventario.agregar_mascota(mascota)
-                    url = "https://acariciame-la-mascota.herokuapp.com/mascota_guardar/"
+                    url = "https://localhost:2020/mascota_guardar/"
                     body = {
                         "codigoMascota": codigoMascota,
                         "tipoMascota": tipo_mascota,
@@ -165,7 +165,7 @@ if __name__ == '__main__':
                                     precioAlimento)
                 try:
                     inventario.agregar_alimento(alimento)
-                    url = "https://acariciame-la-mascota.herokuapp.com/alimento_guardar/"
+                    url = "https://localhost:2020/alimento_guardar/"
                     body = {
                         "codigoAlimento": codigoAlimento,
                         "tipoAlimento": tipo_alimento,
@@ -190,7 +190,7 @@ if __name__ == '__main__':
                                       descripcionAccesorio, usoAccesorio)
                 try:
                     inventario.agregar_accesorio(accesorio)
-                    url = "https://acariciame-la-mascota.herokuapp.com/accesorio_guardar/"
+                    url = "https://localhost:2020/accesorio_guardar/"
                     body = {
                         "codigoAccesorio": codigoAccesorio,
                         "nombre": nombreAccesorio,
@@ -225,7 +225,7 @@ if __name__ == '__main__':
                                     edadEmpleado, direccionEmpleado, correoEmpleado, horarioEmpleado)
                 try:
                     inventario.agregar_empleado(empleado)
-                    url = "https://acariciame-la-mascota.herokuapp.com/empleado_guardar/"
+                    url = "https://localhost:2020/empleado_guardar/"
                     body = {
                         "codigo": codigoEmpleado,
                         "nombre": nombreEmpleado,
@@ -266,7 +266,7 @@ if __name__ == '__main__':
                           , direccionCliente, correoCliente, edadCliente, tiempoCliente)
         try:
             inventario.agregar_cliente(cliente)
-            url = "https://acariciame-la-mascota.herokuapp.com/cliente_guardar/"
+            url = "https://localhost:2020/cliente_guardar/"
             body = {
                 "codigoCliente": codigoCliente,
                 "nombre": nombreCliente,
@@ -324,7 +324,7 @@ def actualizarInformacion():
                 caracteristica = input("Ingrese la característica que quiere editar: ")
                 valor = input("Ingrese el valor por el cual quiere reemplazarla: ")
                 atributos[caracteristica] = valor
-            url = "https://acariciame-la-mascota.herokuapp.com/mascota_actualizar/" + codigoMascota
+            url = "https://localhost:2020/mascota_actualizar/" + codigoMascota
             body = {
 
                 "tipoMascota": atributos["tipoMascota"],
@@ -355,7 +355,7 @@ def actualizarInformacion():
                 caracteristica = input("Ingrese la característica que quiere editar: ")
                 valor = input("Ingrese el valor por el cual quiere reemplazarla: ")
                 atributos[caracteristica] = valor
-            url = "https://acariciame-la-mascota.herokuapp.com/alimento_actualizar/" + codigoAlimento
+            url = "https://localhost:2020/alimento_actualizar/" + codigoAlimento
             body = {
                 "tipoAlimento": atributos["tipoAlimento"],
                 "nombreProducto": atributos["nombreProducto"],
@@ -383,7 +383,7 @@ def actualizarInformacion():
                 caracteristica = input("Ingrese la característica que quiere editar: ")
                 valor = input("Ingrese el valor por el cual quiere reemplazarla: ")
                 atributos[caracteristica] = valor
-            url = "https://acariciame-la-mascota.herokuapp.com/accesorio_actualizar/" + codigoAccesorio
+            url = "https://localhost:2020/accesorio_actualizar/" + codigoAccesorio
             body = {
                 "nombreAccesorio": atributos["nombreAccesorio"],
                 "precioAccesorio": atributos["precioAccesorio"],
@@ -414,7 +414,7 @@ def actualizarInformacion():
                 caracteristica = input("Ingrese la característica que quiere editar: ")
                 valor = input("Ingrese el valor por el cual quiere reemplazarla: ")
                 atributos[caracteristica] = valor
-            url = "https://acariciame-la-mascota.herokuapp.com/cliente_actualizar/" + codigoCliente
+            url = "https://localhost:2020/cliente_actualizar/" + codigoCliente
             body = {
                 "nombre": atributos["nombre"],
                 "apellido": atributos["apellido"],
@@ -451,7 +451,7 @@ def actualizarInformacion():
                 caracteristica = input("Ingrese la característica que quiere editar: ")
                 valor = input("Ingrese el valor por el cual quiere reemplazarla: ")
                 atributos[caracteristica] = valor
-            url = "https://acariciame-la-mascota.herokuapp.com/empleado_actualizar/" + codigoEmpleado
+            url = "https://localhost:2020/empleado_actualizar/" + codigoEmpleado
             body = {
                 "nombre": atributos["nombre"],
                 "apellido": atributos["apellido"],
@@ -496,7 +496,7 @@ def eliminarInformacion():
                           2. No""")
                 confirmacion = input("Cual de las opciones quieres?:")
                 if confirmacion == "1":
-                    url = "https://acariciame-la-mascota.herokuapp.com/mascota_eliminar/" + codigoMascota
+                    url = "https://localhost:2020/mascota_eliminar/" + codigoMascota
                     response = requests.request("DELETE", url)
                     print(response.status_code)
                 elif confirmacion == "2":
@@ -517,7 +517,7 @@ def eliminarInformacion():
                           2. No""")
                 confirmacion = input("cual de las opciones quieres?:")
                 if confirmacion == "1":
-                    url = "https://acariciame-la-mascota.herokuapp.com/alimento_eliminar/" + codigoAlimento
+                    url = "https://localhost:2020/alimento_eliminar/" + codigoAlimento
                     response = requests.request("DELETE", url)
                     print(response.status_code)
                 elif confirmacion == "2":
@@ -538,7 +538,7 @@ def eliminarInformacion():
                           2. No""")
                 confirmacion = input("Cual de las opciones quieres?")
                 if confirmacion == "1":
-                    url = "https://acariciame-la-mascota.herokuapp.com/accesorio_eliminar/" + codigoAccesorio
+                    url = "https://localhost:2020/accesorio_eliminar/" + codigoAccesorio
                     response = requests.request("DELETE", url)
                     print(response.status_code)
                 elif confirmacion == "2":
@@ -864,7 +864,7 @@ def venderMascota(inventario):
     saverMascota.actualizar_mascota(mascotas[0], mascotas[0].codigoMascota)
     try:
         inventario.agregar_venta(venta)
-        url = "https://acariciame-la-mascota.herokuapp.com/venta_guardar/"
+        url = "https://localhost:2020/venta_guardar/"
         body = {
             "cantidadVenta": cantidad,
             "precioUnidad": mascotas[0].precio,
@@ -930,7 +930,7 @@ def venderAccesorio(inventario):
     saverAccesorios.actualizar_accesorio(accesorios[0], accesorios[0].codigoAccesorio)
     try:
         inventario.agregar_venta(venta)
-        url = "https://acariciame-la-mascota.herokuapp.com/venta_guardar/"
+        url = "https://localhost:2020/venta_guardar/"
         body = {
             "cantidadVenta": cantidad,
             "precioUnidad": accesorios[0].precio,
@@ -996,7 +996,7 @@ def venderAlimento(inventario):
     saverAlimentos.actualizar_alimento(alimentos[0], alimentos[0].codigoAlimento)
     try:
         inventario.agregar_venta(venta)
-        url = "https://acariciame-la-mascota.herokuapp.com/mascota_guardar/"
+        url = "https://localhost:2020/mascota_guardar/"
         body = {
             "cantidadVenta": cantidad,
             "precioUnidad": alimentos[0].precio,
