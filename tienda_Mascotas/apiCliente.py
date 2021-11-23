@@ -1,6 +1,6 @@
 import falcon
 import waitress
-from falcon import API
+from falcon import App
 
 from tienda_Mascotas.Dominio.cliente import Cliente
 from tienda_Mascotas.Infraestructura.persistenciaCliente import PersistenciaCliente
@@ -60,9 +60,8 @@ class cliente():
         resp.status = falcon.HTTP_OK
 
 
-def iniciar() -> API:
+def iniciar(api) -> App:
     # run:app -b 0.0.0.0:2020 --workers 1 -t 240
-    api = API()
     api.add_route("/cliente/", cliente())
     api.add_route("/cliente_guardar/", cliente())
     api.add_route("/cliente_actualizar/{codigoCliente}", cliente())
@@ -70,6 +69,3 @@ def iniciar() -> API:
     return api
 
 
-app = iniciar()
-if __name__ == '__main__':
-    waitress.serve(app, port=2020, url_scheme='http')

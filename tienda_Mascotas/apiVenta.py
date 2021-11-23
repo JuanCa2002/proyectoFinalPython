@@ -1,6 +1,6 @@
 import falcon
 import waitress
-from falcon import API
+from falcon import App
 
 from tienda_Mascotas.Dominio.venta import Venta
 from tienda_Mascotas.Infraestructura.persistenciaVenta import PersistenciaVenta
@@ -52,15 +52,11 @@ class venta():
 
 
 
-def iniciar() -> API:
+def iniciar(api) -> App:
     # run:app -b 0.0.0.0:2020 --workers 1 -t 240
-    api = API()
     api.add_route("/venta/", venta())
     api.add_route("/venta_guardar/", venta())
 
     return api
 
 
-app = iniciar()
-if __name__ == '__main__':
-    waitress.serve(app, port=2020, url_scheme='http')
