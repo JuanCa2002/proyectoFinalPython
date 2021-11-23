@@ -5,7 +5,6 @@ from tienda_Mascotas.Dominio.accesorio import Accesorio
 from tienda_Mascotas.Dominio.cliente import Cliente
 from tienda_Mascotas.Dominio.empleado import Empleado
 from tienda_Mascotas.Dominio.venta import Venta
-
 from tienda_Mascotas.Infraestructura.persistencia_accesorio import PersistenciaAccesorio
 from tienda_Mascotas.Infraestructura.persistencia_alimento import PersistenciaAlimento
 from tienda_Mascotas.Infraestructura.persistencia_cliente import PersistenciaCliente
