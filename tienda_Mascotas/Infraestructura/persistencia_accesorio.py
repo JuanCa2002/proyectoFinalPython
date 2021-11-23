@@ -7,7 +7,7 @@ from tienda_Mascotas.Dominio.accesorio import Accesorio
 
 class PersistenciaAccesorio:
     def __init__(self):
-        self.con = sqlite3.connect("https://acariciame-la-mascota.herokuapp.com/la_tienda_de_mascotas.sqlite")
+        self.con = sqlite3.connect("la_tienda_de_mascotas.sqlite")
 
     def connect(self):
         self.__crear_tabla_accesorio()
